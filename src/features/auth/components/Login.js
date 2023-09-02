@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { increment, incrementAsync, selectCount } from "../authSlice";
 import { Link } from "react-router-dom";
 
-export function Login() {
+export default function Login() {
   const count = useSelector(selectCount);
   const dispatch = useDispatch();
 
