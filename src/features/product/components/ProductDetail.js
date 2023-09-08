@@ -4,6 +4,8 @@ import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectedProductById, fetchAllProductByIdAsync } from "../productSlice";
 import { useParams } from "react-router-dom";
+import { addToCartAsync } from "../../cart/cartSlice";
+import { selectLoggedInUser } from "../../auth/authSlice";
 // breadcrumbs: [
 //   { id: 1, name: 'Men', href: '#' },
 //   { id: 2, name: 'Clothing', href: '#' },
@@ -43,6 +45,12 @@ export default function ProductDetail() {
   const product = useSelector(SelectedProductById);
   const dispatch = useDispatch();
   const params = useParams();
+  const user = useSelector(selectLoggedInUser);
+
+  const handleCart = (e) => {
+    e.preventDefault();
+    dispatch(addToCartAsync({ ...product, quantity: 1, user: user.id }));
+  };
 
   useEffect(() => {
     dispatch(fetchAllProductByIdAsync(params.id));
@@ -53,7 +61,7 @@ export default function ProductDetail() {
     <div className="bg-white">
       {product ? (
         <div className="pt-2 mx-auto max-w-7xl px-4 sm:px-6 lg:px-20">
-        {/* className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-20" */}
+          {/* className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-20" */}
           <nav aria-label="Breadcrumb">
             <ol
               role="list"
@@ -296,6 +304,7 @@ export default function ProductDetail() {
                 </div>
 
                 <button
+                  onClick={handleCart}
                   type="submit"
                   className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
