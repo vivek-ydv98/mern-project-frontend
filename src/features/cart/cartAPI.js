@@ -14,7 +14,6 @@ export function addToCart(item) {
 export function fetchItemsByUserId(userId) {
   //TODO : we will not hard code server URl here
   return new Promise(async (resolve) => {
-    console.log(userId);
     const response = await fetch("http://localhost:8080/cart?user=" + userId);
     const data = await response.json();
     resolve({ data });

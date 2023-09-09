@@ -11,7 +11,7 @@ import {
 
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const products = [
   {
@@ -61,7 +61,8 @@ export default function Cart() {
 
   return (
     <>
-      <div className="mx-auto mt-10  max-w-7xl px-4 sm:px-6 lg:px-8">
+      {!items.length && <Navigate to={"/"} replace={true}></Navigate>}
+      <div className="mx-auto mt-10 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="border-t border-gray-200 px-4 py-2 sm:px-20">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900">
             Cart
@@ -92,11 +93,12 @@ export default function Cart() {
                       <div className="text-gray-500">
                         <label
                           htmlFor="email"
-                          className="inline mr-5 text-sm font-medium leading-6 text-gray-900"
+                          className="inline mr-3 text-sm font-medium leading-6 text-gray-900"
                         >
                           Qty
                         </label>
                         <select
+                          className="rounded-lg shadow-md"
                           value={item.quantity}
                           onChange={(e) => handleQuantity(e, item)}
                         >

@@ -23,8 +23,6 @@ export default function Login() {
   } = useForm();
   const onSubmit = (data) => console.log(data);
 
-  console.log(errors);
-
   return (
     <div>
       {user && <Navigate to={"/"} replace={true}></Navigate>}
@@ -48,7 +46,6 @@ export default function Login() {
               dispatch(
                 checkeUserAsync({ email: data.email, password: data.password })
               );
-              console.log(data);
             })}
           >
             <div>
