@@ -1,5 +1,6 @@
 // A mock function to mimic making an async request for data
 export function addToCart(item) {
+  console.log(item);
   return new Promise(async (resolve) => {
     const response = await fetch("http://localhost:8080/cart", {
       method: "POST",
@@ -16,6 +17,7 @@ export function fetchItemsByUserId(userId) {
   return new Promise(async (resolve) => {
     const response = await fetch("http://localhost:8080/cart?user=" + userId);
     const data = await response.json();
+    console.log(data);
     resolve({ data });
   });
 }
@@ -40,5 +42,16 @@ export function deleteItemFromCart(itemId) {
     });
     const data = await response.json();
     resolve({ data: { id: itemId } });
+  });
+}
+export function resetCart(userId) {
+  return new Promise(async (resolve) => {
+    const response = await fetchItemsByUserId(userId);
+    const items = await response.data;
+    for (let item of items) {
+      console.log(item);
+      await deleteItemFromCart(item.id);
+    }
+    resolve({ status: "success" });
   });
 }

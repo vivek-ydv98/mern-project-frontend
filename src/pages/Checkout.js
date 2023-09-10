@@ -13,7 +13,7 @@ import {
   selectLoggedInUser,
   updateUserAsync,
 } from "../features/auth/authSlice";
-import { createOrderAsync } from "../features/order/orderSlice";
+import { createOrderAsync, selectCurrentOrder } from "../features/order/orderSlice";
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -24,24 +24,19 @@ export default function Checkout() {
     formState: { errors },
   } = useForm();
   const user = useSelector(selectLoggedInUser);
-  console.log(user);
-
   const items = useSelector(selectItems);
-  const totalAmount = items.reduce(
-    (amount, item) => item.price * item.quantity + amount,
-    0
-  );
+  const currentOrder = useSelector(selectCurrentOrder);
+  const totalAmount = items.reduce((amount, item) => item.price * item.quantity + amount,0);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
 
   const handleQuantity = (e, item) => {
     dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
   };
-
   const handleRemove = (e, id) => {
     dispatch(deleteItemFromCartAsync(id));
   };
-  const [selectedAddress, setSelectedAddress] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState("cash");
   const handleAddress = (e) => {
     console.log(e.target.value);
     setSelectedAddress(user.addresses[e.target.value]);
@@ -51,17 +46,12 @@ export default function Checkout() {
     setPaymentMethod(e.target.value);
   };
   const handleOrder = (e) => {
-    console.log(e.target.value);
-    const order = {
-      items,
-      totalAmount,
-      totalItems,
-      user,
-      paymentMethod,
-      selectedAddress,
-    };
+    if(selectedAddress && paymentMethod){
+    const order = {items,totalAmount,totalItems,user,paymentMethod,selectedAddress,status:'pending'};
     dispatch(createOrderAsync(order));
-
+  }else{
+    alert('Enter Address and Payment method')
+  }
     //to do :redirection success
     //to do :clear cart order
     //to do : on server change the stock of item
@@ -70,6 +60,7 @@ export default function Checkout() {
   return (
     <div>
       {!items.length && <Navigate to={"/"} replace={true}></Navigate>}
+      {currentOrder && <Navigate to={"/order-success/"+currentOrder.id} replace={true}></Navigate>}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-20">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
@@ -295,7 +286,6 @@ export default function Checkout() {
                           <p className="text-sm leading-6 text-gray-900">
                             {address.city}
                           </p>
-                          {address.lastSeen}
                         </div>
                       </li>
                     ))}

@@ -22,8 +22,8 @@ const navigation = [
   { name: "Projects", href: "#", current: false },
 ];
 const userNavigation = [
-  { name: "Your Profile", href: "/" },
-  { name: "Settings", link: "/" },
+  { name: "Your Profile", link: "/profile" },
+  { name: "My orders", link: "/orders" },
   { name: "Sign out", link: "/login" },
 ];
 
@@ -213,7 +213,7 @@ export default function Navbar({ children }) {
                       <Disclosure.Button
                         key={item.name}
                         as="a"
-                        href={item.href}
+                        href={item.link}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
                         {item.name}
