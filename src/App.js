@@ -1,20 +1,22 @@
 // import logo from './logo.svg';
 import React, { useEffect } from "react";
 import "./App.css";
-import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
+import UserProfilePage from "./pages/UserProfilePage";
 import UserOrdersPage from "./pages/UserOrdersPage";
 import PageNotFound from "./pages/404";
 import SignupPage from "./pages/SignupPage";
-import Protected from "./features/auth/components/Protected";
 import LoginPage from "./pages/LoginPage";
+import Protected from "./features/auth/components/Protected";
 import Checkout from "./pages/Checkout";
 import CartPage from "./pages/CartPage";
 import Home from "./pages/Home";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
 import { selectLoggedInUser } from "./features/auth/authSlice";
+import { fetchLoggedInUserAsync } from "./features/user/userSlice";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +69,14 @@ const router = createBrowserRouter([
       </Protected>
     ),
   },
+  {
+    path: "/profile",
+    element: (
+      <Protected>
+        <UserProfilePage></UserProfilePage>
+      </Protected>
+    ),
+  },
   { path: "*", element: <PageNotFound></PageNotFound> },
 ]);
 
@@ -76,6 +86,7 @@ function App() {
   useEffect(() => {
     if (user) {
       dispatch(fetchItemsByUserIdAsync(user.id));
+      dispatch(fetchLoggedInUserAsync(user.id))
     }
   }, [dispatch, user]);
   return (

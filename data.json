@@ -2341,22 +2341,49 @@
       "id": 1,
       "addresses": [
         {
-          "name": "pratik",
-          "email": "pratik12@gmail.com",
-          "phone": "345436456456",
-          "street": "232main",
+          "name": "pushparaj66",
+          "email": "werrewrwe",
+          "phone": "345436456456777777777777777",
+          "street": "6877 main",
           "city": "boriwali",
           "state": "mumbai",
-          "pinCode": "45345"
+          "pinCode": "2343242"
         },
         {
-          "name": "shyam",
+          "name": "kartiktttttttttt",
           "email": "sda@2ail.com",
-          "phone": "7208603470",
-          "street": "12 main",
+          "phone": "867367863274678",
+          "street": "rewre",
+          "city": "boriwalidsd",
+          "state": "mumbai",
+          "pinCode": "234243"
+        },
+        {
+          "name": "shyamyyqqqqqqqqqqqq",
+          "email": "aa12@gmail.com",
+          "phone": "867367863274678uu",
+          "street": "6877 mainiui",
           "city": "andheri",
           "state": "mumbai",
-          "pinCode": "68656"
+          "pinCode": "y6768"
+        },
+        {
+          "name": "pavanuuuuuuuuuuu",
+          "email": "sda@2ail.com",
+          "phone": "345436456456",
+          "street": "232main",
+          "city": "andheri",
+          "state": "mumbai",
+          "pinCode": "78678"
+        },
+        {
+          "name": "pratik",
+          "email": "aa12@gmail.com",
+          "phone": "8528835037",
+          "street": "232mainnnnnnnnnnn",
+          "city": "boriwalidsd",
+          "state": "mumbai",
+          "pinCode": "8687"
         }
       ]
     },
@@ -2450,63 +2477,80 @@
         "id": 1,
         "addresses": [
           {
-            "name": "pratik",
-            "email": "pratik12@gmail.com",
-            "phone": "345436456456",
-            "street": "232main",
-            "city": "boriwali",
-            "state": "mumbai",
-            "pinCode": "45345"
-          },
-          {
-            "name": "shyam",
-            "email": "sda@2ail.com",
+            "name": "shyamyy",
+            "email": "shyam34@2ail.com",
             "phone": "7208603470",
             "street": "12 main",
             "city": "andheri",
             "state": "mumbai",
             "pinCode": "68656"
+          },
+          {
+            "name": "pavan",
+            "email": "aa12@gmail.com",
+            "phone": "345436456456",
+            "street": "232main",
+            "city": "andheri",
+            "state": "mumbai",
+            "pinCode": "54647"
+          },
+          {
+            "name": "ramu",
+            "email": "ramu21@gmail.com",
+            "phone": "867367863274678",
+            "street": "232mainnnnnnnnnnn",
+            "city": "boriwali",
+            "state": "mumbai",
+            "pinCode": "345345"
+          },
+          {
+            "name": "naveen",
+            "email": "naveen21@gmail.com",
+            "phone": "7208603470",
+            "street": "6877 main",
+            "city": "boriwali",
+            "state": "mumbai",
+            "pinCode": "534535"
           }
         ]
       },
-      "paymentMethod": "cash",
+      "paymentMethod": "card",
       "selectedAddress": {
-        "name": "pratik",
-        "email": "pratik12@gmail.com",
-        "phone": "345436456456",
-        "street": "232main",
+        "name": "naveen",
+        "email": "naveen21@gmail.com",
+        "phone": "7208603470",
+        "street": "6877 main",
         "city": "boriwali",
         "state": "mumbai",
-        "pinCode": "45345"
+        "pinCode": "534535"
       },
       "status": "pending",
-      "id": 3
+      "id": 1
     },
     {
       "items": [
         {
-          "title": "Microsoft Surface Laptop 4",
-          "description": "Style and speed. Stand out on HD video calls backed by Studio Mics. Capture ideas on the vibrant touchscreen.",
-          "price": 1499,
-          "discountPercentage": 10.23,
-          "rating": 4.43,
-          "stock": 68,
-          "brand": "Microsoft Surface",
-          "category": "laptops",
-          "thumbnail": "https://i.dummyjson.com/data/products/8/thumbnail.jpg",
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
           "images": [
-            "https://i.dummyjson.com/data/products/8/1.jpg",
-            "https://i.dummyjson.com/data/products/8/2.jpg",
-            "https://i.dummyjson.com/data/products/8/3.jpg",
-            "https://i.dummyjson.com/data/products/8/4.jpg",
-            "https://i.dummyjson.com/data/products/8/thumbnail.jpg"
+            "https://i.dummyjson.com/data/products/2/1.jpg",
+            "https://i.dummyjson.com/data/products/2/2.jpg",
+            "https://i.dummyjson.com/data/products/2/3.jpg",
+            "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
           ],
           "quantity": 1,
           "user": 1,
           "id": 3
         }
       ],
-      "totalAmount": 1499,
+      "totalAmount": 899,
       "totalItems": 1,
       "user": {
         "email": "dd@gmail.com",
@@ -2514,37 +2558,156 @@
         "id": 1,
         "addresses": [
           {
-            "name": "pratik",
-            "email": "pratik12@gmail.com",
-            "phone": "345436456456",
-            "street": "232main",
-            "city": "boriwali",
-            "state": "mumbai",
-            "pinCode": "45345"
-          },
-          {
-            "name": "shyam",
-            "email": "sda@2ail.com",
+            "name": "shyamyy",
+            "email": "shyam34@2ail.com",
             "phone": "7208603470",
             "street": "12 main",
             "city": "andheri",
             "state": "mumbai",
             "pinCode": "68656"
+          },
+          {
+            "name": "naveen",
+            "email": "naveen21@gmail.com",
+            "phone": "7208603470",
+            "street": "6877 main",
+            "city": "boriwali",
+            "state": "mumbai",
+            "pinCode": "534535"
+          },
+          {
+            "name": "pratik",
+            "email": "aa12@gmail.com",
+            "phone": "8528835037",
+            "street": "232mainnnnnnnnnnn",
+            "city": "boriwali",
+            "state": "mumbai",
+            "pinCode": "879789"
+          }
+        ]
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "pratik",
+        "email": "aa12@gmail.com",
+        "phone": "8528835037",
+        "street": "232mainnnnnnnnnnn",
+        "city": "boriwali",
+        "state": "mumbai",
+        "pinCode": "879789"
+      },
+      "status": "pending",
+      "id": 2
+    },
+    {
+      "items": [
+        {
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/2/1.jpg",
+            "https://i.dummyjson.com/data/products/2/2.jpg",
+            "https://i.dummyjson.com/data/products/2/3.jpg",
+            "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 3
+        },
+        {
+          "title": "HP Pavilion 15-DK1056WM",
+          "description": "HP Pavilion 15-DK1056WM Gaming Laptop 10th Gen Core i5, 8GB, 256GB SSD, GTX 1650 4GB, Windows 10",
+          "price": 1099,
+          "discountPercentage": 6.18,
+          "rating": 4.43,
+          "stock": 89,
+          "brand": "HP Pavilion",
+          "category": "laptops",
+          "thumbnail": "https://i.dummyjson.com/data/products/10/thumbnail.jpeg",
+          "images": [
+            "https://i.dummyjson.com/data/products/10/1.jpg",
+            "https://i.dummyjson.com/data/products/10/2.jpg",
+            "https://i.dummyjson.com/data/products/10/3.jpg",
+            "https://i.dummyjson.com/data/products/10/thumbnail.jpeg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 4
+        }
+      ],
+      "totalAmount": 1998,
+      "totalItems": 2,
+      "user": {
+        "email": "dd@gmail.com",
+        "password": "Vivekyadav1",
+        "id": 1,
+        "addresses": [
+          {
+            "name": "pushparaj66",
+            "email": "werrewrwe",
+            "phone": "345436456456777777777777777",
+            "street": "6877 main",
+            "city": "boriwali",
+            "state": "mumbai",
+            "pinCode": "2343242"
+          },
+          {
+            "name": "kartiktttttttttt",
+            "email": "sda@2ail.com",
+            "phone": "867367863274678",
+            "street": "rewre",
+            "city": "boriwalidsd",
+            "state": "mumbai",
+            "pinCode": "234243"
+          },
+          {
+            "name": "shyamyyqqqqqqqqqqqq",
+            "email": "aa12@gmail.com",
+            "phone": "867367863274678uu",
+            "street": "6877 mainiui",
+            "city": "andheri",
+            "state": "mumbai",
+            "pinCode": "y6768"
+          },
+          {
+            "name": "pavanuuuuuuuuuuu",
+            "email": "sda@2ail.com",
+            "phone": "345436456456",
+            "street": "232main",
+            "city": "andheri",
+            "state": "mumbai",
+            "pinCode": "78678"
+          },
+          {
+            "name": "pratik",
+            "email": "aa12@gmail.com",
+            "phone": "8528835037",
+            "street": "232mainnnnnnnnnnn",
+            "city": "boriwalidsd",
+            "state": "mumbai",
+            "pinCode": "8687"
           }
         ]
       },
       "paymentMethod": "cash",
       "selectedAddress": {
-        "name": "shyam",
-        "email": "sda@2ail.com",
-        "phone": "7208603470",
-        "street": "12 main",
+        "name": "shyamyyqqqqqqqqqqqq",
+        "email": "aa12@gmail.com",
+        "phone": "867367863274678uu",
+        "street": "6877 mainiui",
         "city": "andheri",
         "state": "mumbai",
-        "pinCode": "68656"
+        "pinCode": "y6768"
       },
       "status": "pending",
-      "id": 4
+      "id": 3
     }
   ]
 }

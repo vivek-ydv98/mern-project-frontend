@@ -13,7 +13,11 @@ import {
   selectLoggedInUser,
   updateUserAsync,
 } from "../features/auth/authSlice";
-import { createOrderAsync, selectCurrentOrder } from "../features/order/orderSlice";
+import {
+  createOrderAsync,
+  selectCurrentOrder,
+} from "../features/order/orderSlice";
+import { selectUserInfo } from "../features/user/userSlice";
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -23,10 +27,13 @@ export default function Checkout() {
     reset,
     formState: { errors },
   } = useForm();
-  const user = useSelector(selectLoggedInUser);
+  const user = useSelector(selectUserInfo);
   const items = useSelector(selectItems);
   const currentOrder = useSelector(selectCurrentOrder);
-  const totalAmount = items.reduce((amount, item) => item.price * item.quantity + amount,0);
+  const totalAmount = items.reduce(
+    (amount, item) => item.price * item.quantity + amount,
+    0
+  );
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
@@ -46,12 +53,20 @@ export default function Checkout() {
     setPaymentMethod(e.target.value);
   };
   const handleOrder = (e) => {
-    if(selectedAddress && paymentMethod){
-    const order = {items,totalAmount,totalItems,user,paymentMethod,selectedAddress,status:'pending'};
-    dispatch(createOrderAsync(order));
-  }else{
-    alert('Enter Address and Payment method')
-  }
+    if (selectedAddress && paymentMethod) {
+      const order = {
+        items,
+        totalAmount,
+        totalItems,
+        user,
+        paymentMethod,
+        selectedAddress,
+        status: "pending",
+      };
+      dispatch(createOrderAsync(order));
+    } else {
+      alert("Enter Address and Payment method");
+    }
     //to do :redirection success
     //to do :clear cart order
     //to do : on server change the stock of item
@@ -60,12 +75,17 @@ export default function Checkout() {
   return (
     <div>
       {!items.length && <Navigate to={"/"} replace={true}></Navigate>}
-      {currentOrder && <Navigate to={"/order-success/"+currentOrder.id} replace={true}></Navigate>}
+      {currentOrder && (
+        <Navigate
+          to={"/order-success/" + currentOrder.id}
+          replace={true}
+        ></Navigate>
+      )}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-20">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 border-t border-gray-200 bg-white px-5 py-3 mt-4">
             <form
-              className="bg-white px-5 py-3 mt-4"
+              // className="bg-white px-5 py-3 mt-4"
               noValidate
               onSubmit={handleSubmit((data) => {
                 console.log(data);
@@ -78,15 +98,14 @@ export default function Checkout() {
                 reset();
               })}
             >
-              <div className="space-y-3">
-                <div className="border-b border-gray-900/10 pb-6">
+              <div className="space-y-3 ">
+                <div className="border-b  border-gray-900/10 pb-6">
                   <h2 className="text-2xl font-semibold leading-7 text-gray-900">
                     Personal Information
                   </h2>
                   <p className="mt-1 text-sm leading-6 text-gray-600">
                     Use a permanent address where you can receive mail.
                   </p>
-
                   <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-6">
                     <div className="sm:col-span-3">
                       <label
@@ -104,9 +123,11 @@ export default function Checkout() {
                           id="name"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
+                        {errors.name && (
+                          <p className="text-red-500">{errors.name.message}</p>
+                        )}
                       </div>
                     </div>
-
                     <div className="sm:col-span-4">
                       <label
                         htmlFor="email"
@@ -123,9 +144,11 @@ export default function Checkout() {
                           type="email"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
+                        {errors.email && (
+                          <p className="text-red-500">{errors.email.message}</p>
+                        )}
                       </div>
                     </div>
-
                     <div className="sm:col-span-3">
                       <label
                         htmlFor="phone"
@@ -143,8 +166,10 @@ export default function Checkout() {
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                       </div>
+                      {errors.phone && (
+                        <p className="text-red-500">{errors.phone.message}</p>
+                      )}
                     </div>
-
                     <div className="col-span-full">
                       <label
                         htmlFor="street"
@@ -161,9 +186,13 @@ export default function Checkout() {
                           id="street"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
+                        {errors.street && (
+                          <p className="text-red-500">
+                            {errors.street.message}
+                          </p>
+                        )}
                       </div>
                     </div>
-
                     <div className="sm:col-span-2 sm:col-start-1">
                       <label
                         htmlFor="city"
@@ -181,9 +210,11 @@ export default function Checkout() {
                           autoComplete="address-level2"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
+                        {errors.city && (
+                          <p className="text-red-500">{errors.city.message}</p>
+                        )}
                       </div>
                     </div>
-
                     <div className="sm:col-span-2">
                       <label
                         htmlFor="state"
@@ -201,9 +232,11 @@ export default function Checkout() {
                           autoComplete="address-level1"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
+                        {errors.state && (
+                          <p className="text-red-500">{errors.state.message}</p>
+                        )}
                       </div>
                     </div>
-
                     <div className="sm:col-span-2">
                       <label
                         htmlFor="pinCode"
@@ -221,14 +254,20 @@ export default function Checkout() {
                           autoComplete="pinCode"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
+                        {errors.pinCode && (
+                          <p className="text-red-500">
+                            {errors.pinCode.message}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center justify-end gap-x-6">
                   <button
+                    onClick={(e) => reset()}
                     type="button"
-                    className="text-sm font-semibold leading-6 text-gray-900"
+                    className="text-sm font-semibold leading-6 text-gray-900 "
                   >
                     Reset
                   </button>
@@ -239,109 +278,109 @@ export default function Checkout() {
                     Add Addresses
                   </button>
                 </div>
-
-                <div className="border-b border-gray-900/10 pb-6">
-                  <h2 className="text-base font-semibold leading-7 text-gray-900">
-                    Address
-                  </h2>
-                  <p className="mt-1 text-sm leading-6 text-gray-600">
-                    Choose from exesting addresses
-                  </p>
-                  <ul role="list">
-                    {user.addresses.map((address, index) => (
-                      <li
-                        key={index}
-                        className="flex justify-between gap-x-6 mt-1 py-2 px-3 rounded border-solid border-2 border-gray-200 "
-                      >
-                        <div className="flex min-w-0 gap-x-4">
-                          <input
-                            onChange={handleAddress}
-                            value={index}
-                            name="address"
-                            type="radio"
-                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                          />
-                          <div className="min-w-0 flex-auto">
-                            <p className="text-sm font-semibold leading-6 text-gray-900">
-                              {address.name}
-                            </p>
-                            <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                              {address.email}
-                            </p>
-                            <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                              {address.street}
-                            </p>
-                            <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                              {address.pinCode}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                          <p className="text-sm leading-6 text-gray-900">
-                            Phone : {address.phone}
-                          </p>
-                          <p className="text-sm leading-6 text-gray-900">
-                            {address.state}
-                          </p>
-                          <p className="text-sm leading-6 text-gray-900">
-                            {address.city}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-6 space-y-10">
-                    <fieldset>
-                      <legend className="text-sm font-semibold leading-6 text-gray-900">
-                        Payment Methods
-                      </legend>
-                      <p className="mt-1 text-sm leading-6 text-gray-600">
-                        Choose One
-                      </p>
-                      <div className="mt-6 space-y-6">
-                        <div className="flex items-center gap-x-3">
-                          <input
-                            id="cash"
-                            name="payments"
-                            onChange={handlePayment}
-                            type="radio"
-                            value="cash"
-                            checked={paymentMethod === "cash"}
-                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                          />
-                          <label
-                            htmlFor="cash"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Cash
-                          </label>
-                        </div>
-                        <div className="flex items-center gap-x-3">
-                          <input
-                            id="card"
-                            name="payments"
-                            onChange={handlePayment}
-                            type="radio"
-                            value="card"
-                            checked={paymentMethod === "card"}
-                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                          />
-                          <label
-                            htmlFor="card"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Card Payment
-                          </label>
-                        </div>
-                      </div>
-                    </fieldset>
-                  </div>
-                </div>
               </div>
             </form>
+            <div className="border-b bg-white border-gray-900/10 pb-6">
+              {/* Address Section */}
+              <h2 className="text-base font-semibold leading-7 text-gray-900">
+                Address
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Choose from exesting addresses
+              </p>
+              <ul role="list">
+                {user.addresses.map((address, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between gap-x-6 mt-1 py-2 px-3 rounded border-solid border-2 border-gray-200 "
+                  >
+                    <div className="flex min-w-0 gap-x-4">
+                      <input
+                        onChange={handleAddress}
+                        value={index}
+                        name="address"
+                        type="radio"
+                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      />
+                      <div className="min-w-0 flex-auto">
+                        <p className="text-sm font-semibold leading-6 text-gray-900">
+                          {address.name}
+                        </p>
+                        <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                          {address.email}
+                        </p>
+                        <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                          {address.street}
+                        </p>
+                        <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                          {address.pinCode}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                      <p className="text-sm leading-6 text-gray-900">
+                        Phone : {address.phone}
+                      </p>
+                      <p className="text-sm leading-6 text-gray-900">
+                        {address.state}
+                      </p>
+                      <p className="text-sm leading-6 text-gray-900">
+                        {address.city}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              {/* Payment Section */}
+              <div className="mt-6 space-y-10">
+                <fieldset>
+                  <legend className="text-sm font-semibold leading-6 text-gray-900">
+                    Payment Methods
+                  </legend>
+                  <p className="mt-1 text-sm leading-6 text-gray-600">
+                    Choose One
+                  </p>
+                  <div className="mt-6 space-y-6">
+                    <div className="flex items-center gap-x-3">
+                      <input
+                        id="cash"
+                        name="payments"
+                        onChange={handlePayment}
+                        type="radio"
+                        value="cash"
+                        checked={paymentMethod === "cash"}
+                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      />
+                      <label
+                        htmlFor="cash"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Cash
+                      </label>
+                    </div>
+                    <div className="flex items-center gap-x-3">
+                      <input
+                        id="card"
+                        name="payments"
+                        onChange={handlePayment}
+                        type="radio"
+                        value="card"
+                        checked={paymentMethod === "card"}
+                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      />
+                      <label
+                        htmlFor="card"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Card Payment
+                      </label>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
           </div>
-
+          {/* Cart  Section */}
           <div className="lg:col-span-2">
             <div className="mx-auto mt-4 bg-white  max-w-7xl px-0 sm:px-0 lg:px-0">
               <div className="border-t border-gray-200 px-4 py-4 sm:px-4">
