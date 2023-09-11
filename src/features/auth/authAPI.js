@@ -9,6 +9,7 @@ export function createUser(userData) {
     resolve({ data });
   });
 }
+
 export function checkUser(loginInfo) {
   const email = loginInfo.email;
   const password = loginInfo.password;
@@ -27,4 +28,9 @@ export function checkUser(loginInfo) {
   });
 }
 
-
+export function signOut(userId) {
+  return new Promise(async (resolve) => {
+    // Todo: on server we will remove user session info
+    resolve({ data:"success" });
+  });
+}

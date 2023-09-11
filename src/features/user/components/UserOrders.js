@@ -9,6 +9,7 @@ export default function UserOrders() {
   useEffect(() => {
     dispatch(fetchLoggedInUserOrdersAsync(user.id));
   }, []);
+  console.log(orders)
 
   return (
     <>

@@ -17,6 +17,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
 import { selectLoggedInUser } from "./features/auth/authSlice";
 import { fetchLoggedInUserAsync } from "./features/user/userSlice";
+import Logout from "./features/auth/components/Logout";
+
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -77,7 +80,19 @@ const router = createBrowserRouter([
       </Protected>
     ),
   },
-  { path: "*", element: <PageNotFound></PageNotFound> },
+  {
+    path: "/logout",
+    element: (
+      <Protected>
+        <Logout></Logout>
+      </Protected>
+    ),
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage></ForgotPasswordPage>,
+  },
+  // { path: "*", element: <PageNotFound></PageNotFound> },
 ]);
 
 function App() {
@@ -86,7 +101,7 @@ function App() {
   useEffect(() => {
     if (user) {
       dispatch(fetchItemsByUserIdAsync(user.id));
-      dispatch(fetchLoggedInUserAsync(user.id))
+      dispatch(fetchLoggedInUserAsync(user.id));
     }
   }, [dispatch, user]);
   return (
