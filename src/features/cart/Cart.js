@@ -2,15 +2,9 @@ import { useState, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   deleteItemFromCartAsync,
-  increment,
-  incrementAsync,
-  selectCount,
   selectItems,
   updateCartAsync,
 } from "./cartSlice";
-
-import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, Navigate } from "react-router-dom";
 
 const products = [
@@ -42,9 +36,7 @@ const products = [
 ];
 
 export default function Cart() {
-  // const count = useSelector(selectCount);
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(true);
   const items = useSelector(selectItems);
   const totalAmount = items.reduce(
     (amount, item) => item.price * item.quantity + amount,
