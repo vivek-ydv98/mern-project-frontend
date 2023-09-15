@@ -1,28 +1,11 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  selectAllProducts,
-  selectTotalItems,
-  fetchProductsByFiltersAsync,
-  selectBrands,
-  selectCategories,
-  fetchCategoriesAsync,
-  fetchBrandsAsync,
-} from "../../product/productSlice";
+import {selectAllProducts,selectTotalItems,fetchProductsByFiltersAsync,selectBrands,selectCategories,fetchCategoriesAsync,fetchBrandsAsync} from "../../product/productSlice";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  FunnelIcon,
-  MinusIcon,
-  PlusIcon,
-  Squares2X2Icon,
-  StarIcon,
-} from "@heroicons/react/20/solid";
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, StarIcon} from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
-import { ITEMS_PER_PAGE } from "../../../app/constants";
+import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
 
 const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
@@ -58,10 +41,7 @@ export default function AdminProductList() {
   const [page, setPage] = useState(1);
 
   const handleFilter = (e, section, option) => {
-    console.log(e.target.checked);
     const newFilter = { ...filter };
-
-    //todo : on server it will support multiple categories
     if (e.target.checked) {
       if (newFilter[section.id]) {
         newFilter[section.id].push(option.value);
@@ -76,13 +56,13 @@ export default function AdminProductList() {
     }
     setFilter(newFilter);
   };
+
   const handleSort = (e, option) => {
     const sort = { _sort: option.sort, _order: option.order };
-    console.log(sort);
     setSort(sort);
   };
+
   const handlePage = (page) => {
-    console.log(page);
     setPage(page);
   };
 
@@ -90,13 +70,15 @@ export default function AdminProductList() {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
     dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }));
   }, [dispatch, filter, sort, page]);
+
   useEffect(() => {
     setPage(1);
   }, [totalItems, sort]);
+
   useEffect(() => {
     dispatch(fetchBrandsAsync());
     dispatch(fetchCategoriesAsync());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="bg-white mx-16">
@@ -189,7 +171,6 @@ export default function AdminProductList() {
             ></DesktopFilter>
 
             {/* Product grid */}
-
             <div className="lg:col-span-3">
               <div>
                 <Link
@@ -217,12 +198,8 @@ export default function AdminProductList() {
   );
 }
 
-function MobileFilter({
-  mobileFiltersOpen,
-  setMobileFiltersOpen,
-  handleFilter,
-  filters,
-}) {
+function MobileFilter({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter, filters}) {
+
   return (
     <Transition.Root show={mobileFiltersOpen} as={Fragment}>
       <Dialog
@@ -335,6 +312,7 @@ function MobileFilter({
     </Transition.Root>
   );
 }
+
 function DesktopFilter({ handleFilter, filters }) {
   return (
     <form className="hidden lg:block">
@@ -392,6 +370,7 @@ function DesktopFilter({ handleFilter, filters }) {
 }
 function Pagination({ page, setPage, totalItems, handlePage }) {
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
@@ -466,6 +445,7 @@ function Pagination({ page, setPage, totalItems, handlePage }) {
   );
 }
 function ProductGrid({ products }) {
+
   return (
     <div className="mx-auto bg-white max-w-2xl px-4 py-0 sm:px-2 sm:py-0 lg:max-w-7xl ">
       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
@@ -495,18 +475,18 @@ function ProductGrid({ products }) {
                   </div>
                   <div>
                     <p className="text-sm block font-medium text-gray-900">
-                      $
-                      {Math.round(
-                        product.price * (1 - product.discountPercentage / 100)
-                      )}
+                      ${discountedPrice(product)}
                     </p>
                     <p className="text-sm block line-through font-medium text-gray-400">
                       ${product.price}
                     </p>
                   </div>
                 </div>
-                {product.deleted &&
-                <div><p className="text-sm text-red-400">product deleted</p></div>}
+                {product.deleted && (
+                  <div>
+                    <p className="text-sm text-red-400">product deleted</p>
+                  </div>
+                )}
               </div>
             </Link>
             <div>

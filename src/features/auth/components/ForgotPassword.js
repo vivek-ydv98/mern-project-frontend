@@ -1,14 +1,8 @@
-import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link,} from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 export default function ForgotPassword() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState: { errors }} = useForm();
   const onSubmit = (data) => console.log(data);
 
   return (
@@ -31,7 +25,6 @@ export default function ForgotPassword() {
             className="space-y-6"
             onSubmit={handleSubmit((data) => {
               console.log(data);
-              //   to do implementation
             })}
           >
             <div>

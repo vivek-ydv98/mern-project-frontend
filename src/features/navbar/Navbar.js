@@ -1,22 +1,16 @@
 import React from "react";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import {
-  Bars3Icon,
-  ShoppingCartIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, ShoppingCartIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectItems } from "../cart/cartSlice";
 import { selectLoggedInUser } from "../auth/authSlice";
 
-
 const navigation = [
-  { name: "Dashboard", link: "#", user: true },
-  { name: "Team", link: "#", user: true },
-  { name: "Admin", link: "/admin", admin: true },
-  // { name: "Projects", link: "#", admin: false },
+  { name: "Products", link: "/", user: true },
+  { name: "Products", link: "/admin", admin: true },
+  { name: "Order", link: "/admin/orders", admin: true },
 ];
 const userNavigation = [
   { name: "My Profile", link: "/profile" },
@@ -30,7 +24,8 @@ function classNames(...classes) {
 
 export default function Navbar({ children }) {
   const items = useSelector(selectItems);
-  const user =useSelector(selectLoggedInUser)
+  const user = useSelector(selectLoggedInUser);
+
   return (
     <div>
       <div className="min-h-full">

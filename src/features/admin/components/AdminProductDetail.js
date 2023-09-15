@@ -2,15 +2,11 @@ import React, { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductByIdAsync, selectedProductById,  } from "../../product/productSlice";
+import { fetchProductByIdAsync, selectedProductById} from "../../product/productSlice";
 import { useParams } from "react-router-dom";
 import { addToCartAsync } from "../../cart/cartSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
-// breadcrumbs: [
-//   { id: 1, name: 'Men', href: '#' },
-//   { id: 2, name: 'Clothing', href: '#' },
-// ],
-// const reviews = { href: '#', average: 4, totalCount: 117 }
+import { discountedPrice } from "../../../app/constants";
 
 const colors = [
   { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
@@ -56,7 +52,6 @@ export default function AdminProductDetail() {
   useEffect(() => {
     dispatch(fetchProductByIdAsync(params.id));
   }, [dispatch, params.id]);
-  // todo : in server data we will add colors,size highlights.
 
   return (
     <div className="bg-white">
@@ -149,8 +144,11 @@ export default function AdminProductDetail() {
             {/* Options */}
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">
+              <p className="text-xl line-through tracking-tight text-gray-900">
                 $ {product.price}
+              </p>
+              <p className="text-3xl tracking-tight text-gray-900">
+                $ {discountedPrice(product)}
               </p>
 
               {/* Reviews */}

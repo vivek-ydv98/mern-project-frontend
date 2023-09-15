@@ -13,8 +13,7 @@ export default function OrderSuccessPage() {
   useEffect(() => {
     dispatch(resetCartAsync(user.id));
     dispatch(resetOrder());
-    console.log("ll")
-  }, [dispatch,user]);
+  }, [dispatch, user]);
 
   return (
     <div>

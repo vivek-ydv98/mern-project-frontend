@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {fetchLoggedInUser, fetchLoggedInUserOrders,updateUser } from "./userAPI";
+import {fetchLoggedInUser,fetchLoggedInUserOrders,updateUser} from "./userAPI";
 
 const initialState = {
   userOrders: [],
   status: "idle",
-  userInfo:null,
+  userInfo: null,
 };
 
 export const fetchLoggedInUserOrdersAsync = createAsyncThunk(
@@ -21,14 +21,13 @@ export const fetchLoggedInUserAsync = createAsyncThunk(
     return response.data;
   }
 );
-  export const updateUserAsync = createAsyncThunk(
-    "user/updateUser",
-    async (update) => {
-      const response = await updateUser(update);
-      console.log(response.data);
-      return response.data;
-    }
-  );
+export const updateUserAsync = createAsyncThunk(
+  "user/updateUser",
+  async (update) => {
+    const response = await updateUser(update);
+    return response.data;
+  }
+);
 
 export const userSlice = createSlice({
   name: "user",

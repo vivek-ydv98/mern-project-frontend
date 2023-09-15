@@ -13,6 +13,7 @@ export function createUser(userData) {
 export function checkUser(loginInfo) {
   const email = loginInfo.email;
   const password = loginInfo.password;
+  
   return new Promise(async (resolve, reject) => {
     const response = await fetch("http://localhost:8080/users?email=" + email);
     const data = await response.json();
@@ -30,7 +31,6 @@ export function checkUser(loginInfo) {
 
 export function signOut(userId) {
   return new Promise(async (resolve) => {
-    // Todo: on server we will remove user session info
-    resolve({ data:"success" });
+    resolve({ data: "success" });
   });
 }

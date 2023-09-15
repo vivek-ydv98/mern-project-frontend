@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectLoggedInUser, createUserAsync } from "../authSlice";
 import { Link, Navigate } from "react-router-dom";
@@ -8,18 +7,8 @@ export default function Signup() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState: { errors }} = useForm();
   const onSubmit = (data) => console.log(data);
-
-  console.log(errors);
-
-  // console.log(watch("example")); // watch input value by passing the name of it
-  console.log(user);
 
   return (
     <div>
@@ -47,10 +36,9 @@ export default function Signup() {
                   email: data.email,
                   password: data.password,
                   addresses: [],
-                  role:"user"
+                  role: "user",
                 })
               );
-              console.log(data);
             })}
           >
             <div>

@@ -6,7 +6,7 @@ export default function UserOrdersPage() {
   return (
     <div>
       <Navbar>
-      {/* <h2 className="mx-auto text-2xl">My Orders</h2> */}
+        {/* <h2 className="mx-auto text-2xl">My Orders</h2> */}
         <UserOrders></UserOrders>
       </Navbar>
     </div>

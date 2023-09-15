@@ -4,13 +4,7 @@ import { selectUserInfo, updateUserAsync } from "../userSlice";
 import { useForm } from "react-hook-form";
 
 export default function UserProfile() {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, setValue, reset, formState: { errors }} = useForm();
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo);
   const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
@@ -307,7 +301,6 @@ export default function UserProfile() {
                             Full name
                           </label>
                           <div className="mt-1">
-                            {console.log(address.name)}
                             <input
                               type="text"
                               {...register("name", {
@@ -490,6 +483,7 @@ export default function UserProfile() {
                   </div>
                 </form>
               ) : null}
+
               {/* Display Address */}
               <div className="flex justify-between gap-x-6 mt-1 px-3 rounded border-solid border-2 border-gray-200 ">
                 <div className="flex min-w-0 gap-x-4">

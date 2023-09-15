@@ -1,29 +1,29 @@
 // import logo from './logo.svg';
-import React, { useEffect } from "react";
 import "./App.css";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AdminProductFormPage from "./pages/AdminProductFormPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import AdminProductDetail from "./features/admin/components/AdminProductDetail";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
+import AdminOrdersPage from "./pages/AdminOrdersPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import UserOrdersPage from "./pages/UserOrdersPage";
+import ProtectedAdmin from "./features/auth/components/ProtectedAdmin";
 import PageNotFound from "./pages/404";
 import SignupPage from "./pages/SignupPage";
-import LoginPage from "./pages/LoginPage";
 import Protected from "./features/auth/components/Protected";
-import Checkout from "./pages/Checkout";
-import CartPage from "./pages/CartPage";
-import Home from "./pages/Home";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
-import { selectLoggedInUser } from "./features/auth/authSlice";
-import { fetchLoggedInUserAsync } from "./features/user/userSlice";
-import Logout from "./features/auth/components/Logout";
-
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ProtectedAdmin from "./features/auth/components/ProtectedAdmin";
 import AdminHome from "./pages/AdminHome";
-import AdminProductDetail from "./features/admin/components/AdminProductDetail";
-import AdminProductFormPage from "./pages/AdminProductFormPage";
+import LoginPage from "./pages/LoginPage";
+import CartPage from "./pages/CartPage";
+import Checkout from "./pages/Checkout";
+import Logout from "./features/auth/components/Logout";
+import Home from "./pages/Home";
+import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
+import { fetchLoggedInUserAsync } from "./features/user/userSlice";
+import { selectLoggedInUser } from "./features/auth/authSlice";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +38,7 @@ const router = createBrowserRouter([
     path: "/admin",
     element: (
       <ProtectedAdmin>
+        {" "}
         <AdminHome></AdminHome>
       </ProtectedAdmin>
     ),
@@ -63,6 +64,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedAdmin>
         <AdminProductFormPage></AdminProductFormPage>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: "/admin/orders",
+    element: (
+      <ProtectedAdmin>
+        <AdminOrdersPage></AdminOrdersPage>
       </ProtectedAdmin>
     ),
   },

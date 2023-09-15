@@ -1,5 +1,4 @@
 export function fetchAllProducts() {
-  //TODO : we will not hard code server URl here
   return new Promise(async (resolve) => {
     const response = await fetch("http://localhost:8080/products");
     const data = await response.json();
@@ -7,10 +6,6 @@ export function fetchAllProducts() {
   });
 }
 export function fetchProductsByFilter(filter, sort, pagination) {
-  //filter ={"category":["smartphone","smartphone","laptop"]}
-  // sort = {_sort:"price",_order="desc"}
-  // pagination = {_page:1,limit=10}
-
   let queryString = "";
   for (let key in filter) {
     const categoryValues = filter[key];
@@ -51,7 +46,6 @@ export function fetchBrands() {
     resolve({ data });
   });
 }
-
 export function fetchProductById(id) {
   //TODO : we will not hard code server URl here
   return new Promise(async (resolve) => {
@@ -62,7 +56,7 @@ export function fetchProductById(id) {
 }
 export function createProduct(product) {
   return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8080/products",{
+    const response = await fetch("http://localhost:8080/products", {
       method: "POST",
       body: JSON.stringify(product),
       headers: { "content-type": "application/json" },
@@ -73,11 +67,14 @@ export function createProduct(product) {
 }
 export function updateProduct(update) {
   return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8080/products/" + update.id, {
-      method: "PATCH",
-      body: JSON.stringify(update),
-      headers: { "content-type": "application/json" },
-    });
+    const response = await fetch(
+      "http://localhost:8080/products/" + update.id,
+      {
+        method: "PATCH",
+        body: JSON.stringify(update),
+        headers: { "content-type": "application/json" },
+      }
+    );
     const data = await response.json();
     resolve({ data });
   });

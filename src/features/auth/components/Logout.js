@@ -9,6 +9,6 @@ export default function Logout({}) {
   useEffect(() => {
     dispatch(signOutAsync());
   });
+  
   return <>{!loggedInUser && <Navigate to={"/"} replace={true}></Navigate>}</>;
 }
- 

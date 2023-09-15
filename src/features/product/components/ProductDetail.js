@@ -4,19 +4,16 @@ import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectedProductById, fetchProductByIdAsync } from "../productSlice";
 import { useParams } from "react-router-dom";
-import { addToCartAsync } from "../../cart/cartSlice";
+import { addToCartAsync, selectItems } from "../../cart/cartSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
-// breadcrumbs: [
-//   { id: 1, name: 'Men', href: '#' },
-//   { id: 2, name: 'Clothing', href: '#' },
-// ],
-// const reviews = { href: '#', average: 4, totalCount: 117 }
+import { discountedPrice } from "../../../app/constants";
 
 const colors = [
   { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
   { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
   { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
 ];
+
 const sizes = [
   { name: "XXS", inStock: false },
   { name: "XS", inStock: true },
@@ -46,24 +43,27 @@ export default function ProductDetail() {
   const dispatch = useDispatch();
   const params = useParams();
   const user = useSelector(selectLoggedInUser);
+  const cartItems = useSelector(selectItems);
 
   const handleCart = (e) => {
     e.preventDefault();
-    const newItem = { ...product, quantity: 1, user: user.id };
-    delete newItem["id"];
-    dispatch(addToCartAsync(newItem));
+    if (cartItems.findIndex((items) => items.productId === product.id) < 0) {
+      const newItem = {...product,productId: product.id,quantity: 1,user: user.id};
+      delete newItem["id"];
+      dispatch(addToCartAsync(newItem));
+    } else {
+      console.log("Already added");
+    }
   };
 
   useEffect(() => {
     dispatch(fetchProductByIdAsync(params.id));
   }, [dispatch, params.id]);
-  // todo : in server data we will add colors,size highlights.
 
   return (
     <div className="bg-white">
       {product ? (
         <div className="pt-2 mx-auto max-w-7xl px-4 sm:px-6 lg:px-20">
-          {/* className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-20" */}
           <nav aria-label="Breadcrumb">
             <ol
               role="list"
@@ -131,7 +131,6 @@ export default function ProductDetail() {
             </div>
             <div className="aspect-h-2 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
               <img
-                // src={product.images[3]}
                 src={product.thumbnail}
                 alt={product.title}
                 className="h-full w-full object-cover object-center"
@@ -150,8 +149,11 @@ export default function ProductDetail() {
             {/* Options */}
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">
+              <p className="text-xl line-through tracking-tight text-gray-900">
                 $ {product.price}
+              </p>
+              <p className="text-3xl tracking-tight text-gray-900">
+                $ {discountedPrice(product)}
               </p>
 
               {/* Reviews */}

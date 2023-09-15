@@ -1,25 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearSelectedProduct,
-  createProductAsync,
-  fetchProductByIdAsync,
-  selectBrands,
-  selectCategories,
-  selectedProductById,
-  updateProductAsync,
-} from "../../product/productSlice";
+import {clearSelectedProduct,createProductAsync,fetchProductByIdAsync,selectBrands,selectCategories,selectedProductById,updateProductAsync} from "../../product/productSlice";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
 export default function ProductForm() {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, setValue, reset, formState: { errors }} = useForm();
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
   const dispatch = useDispatch();
@@ -35,7 +21,6 @@ export default function ProductForm() {
   }, [params.id, dispatch]);
 
   useEffect(() => {
-    console.log(selectedProduct);
     if (selectedProduct && params.id) {
       setValue("title", selectedProduct.title);
       setValue("brand", selectedProduct.brand);
@@ -52,21 +37,23 @@ export default function ProductForm() {
     }
   }, [selectedProduct, params.id, setValue]);
 
-const  handleDelete=()=>{
-    const product= {...selectedProduct};
-    product.deleted= true;
-    console.log("ll")
+  const handleDelete = () => {
+    const product = { ...selectedProduct };
+    product.deleted = true;
     dispatch(updateProductAsync(product));
-  }
+  };
 
   return (
     <div className="mx-16">
       <form
         noValidate
         onSubmit={handleSubmit((data) => {
-          console.log(data);
           const product = { ...data };
-          product.images = [ product.image1, product.image2, product.image3, product.image4,
+          product.images = [
+            product.image1,
+            product.image2,
+            product.image3,
+            product.image4,
           ];
           product.rating = 0;
           product.price = +product.price;
@@ -76,7 +63,6 @@ const  handleDelete=()=>{
           delete product["image2"];
           delete product["image3"];
           delete product["image4"];
-          console.log(product);
           if (params.id) {
             product.id = params.id;
             product.rating = selectedProduct.rating || 0;
@@ -481,8 +467,15 @@ const  handleDelete=()=>{
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
-
-       {selectedProduct && <button  onClick={handleDelete} type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Delete</button>}
+          {selectedProduct && (
+            <button
+              onClick={handleDelete}
+              type="button"
+              class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+            >
+              Delete
+            </button>
+          )}
 
           <button
             type="button"

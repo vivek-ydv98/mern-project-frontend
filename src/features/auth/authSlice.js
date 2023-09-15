@@ -8,14 +8,6 @@ const initialState = {
   error: null,
 };
 
-// export const incrementAsync = createAsyncThunk(
-//   "counter/fetchCount",
-//   async (amount) => {
-//     const response = await fetchCount(amount);
-//     return response.data;
-//   }
-// );
-
 export const createUserAsync = createAsyncThunk(
   "user/createUser",
   async (userData) => {
@@ -23,6 +15,7 @@ export const createUserAsync = createAsyncThunk(
     return response.data;
   }
 );
+
 export const checkeUserAsync = createAsyncThunk(
   "user/checkUser",
   async (loginInfo) => {
@@ -30,18 +23,16 @@ export const checkeUserAsync = createAsyncThunk(
     return response.data;
   }
 );
-export const signOutAsync = createAsyncThunk(
-  "user/signOut",
-  async (userId) => {
-    const response = await signOut(userId);
-    return response.data;
-  }
-);
+
+export const signOutAsync = createAsyncThunk("user/signOut", async (userId) => {
+  const response = await signOut(userId);
+  return response.data;
+});
+
 export const updateUserAsync = createAsyncThunk(
   "user/updateUser",
   async (update) => {
     const response = await updateUser(update);
-    console.log(response.data);
     return response.data;
   }
 );
