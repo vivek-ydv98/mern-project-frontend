@@ -25,6 +25,14 @@ import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
 import { fetchLoggedInUserAsync } from "./features/user/userSlice";
 import { selectLoggedInUser } from "./features/auth/authSlice";
 
+import { positions, Provider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
+const options = {
+  timeout: 5000,
+  position: positions.TOP_CENTER,
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -151,7 +159,9 @@ function App() {
   }, [dispatch, user]);
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      <Provider template={AlertTemplate} {...options}>
+        <RouterProvider router={router} />
+      </Provider>
     </div>
   );
 }

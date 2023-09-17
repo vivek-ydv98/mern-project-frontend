@@ -1,16 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {clearSelectedProduct,createProductAsync,fetchProductByIdAsync,selectBrands,selectCategories,selectedProductById,updateProductAsync} from "../../product/productSlice";
+import {
+  clearSelectedProduct,
+  createProductAsync,
+  fetchProductByIdAsync,
+  selectBrands,
+  selectCategories,
+  selectedProductById,
+  updateProductAsync,
+} from "../../product/productSlice";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Modal from "../../common/Modal";
 
 export default function ProductForm() {
-  const { register, handleSubmit, setValue, reset, formState: { errors }} = useForm();
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm();
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
   const dispatch = useDispatch();
   const params = useParams();
   const selectedProduct = useSelector(selectedProductById);
+  const [openModal, setOpenModal] = useState(null);
 
   useEffect(() => {
     if (params.id) {
@@ -82,6 +99,7 @@ export default function ProductForm() {
 
             <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-6">
               <div className="sm:col-span-4">
+                {selectedProduct?.deleted && <h3 className="text-red-500">This Product is Deleted</h3>}
                 <label
                   htmlFor="title"
                   className="block text-sm font-medium leading-6 text-gray-900"
@@ -467,11 +485,14 @@ export default function ProductForm() {
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
-          {selectedProduct && (
+          {selectedProduct && !selectedProduct.deleted && (
             <button
-              onClick={handleDelete}
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenModal(true);
+              }}
               type="button"
-              class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+              className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
             >
               Delete
             </button>
@@ -479,6 +500,7 @@ export default function ProductForm() {
 
           <button
             type="button"
+            onClick={() => navigate(-1)}
             className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
           >
             Cancel
@@ -492,6 +514,15 @@ export default function ProductForm() {
           </button>
         </div>
       </form>
+      <Modal
+        title={`Delete ${selectedProduct?.title}`}
+        message={"Are You Sure Want To Delete This Cart Item"}
+        dangerOption={"Delete"}
+        cancelOption={"Cancel"}
+        dangerAction={handleDelete}
+        cancelAction={(e) => setOpenModal(null)}
+        showModal={openModal}
+      ></Modal>
     </div>
   );
 }
