@@ -4,7 +4,7 @@ import { Link, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteItemFromCartAsync, selectItems, updateCartAsync,} from "../features/cart/cartSlice";
 import { useForm } from "react-hook-form";
-import { updateUserAsync } from "../features/auth/authSlice";
+import { updateUserAsync } from "../features/user/userSlice";
 import {createOrderAsync,selectCurrentOrder,} from "../features/order/orderSlice";
 import { selectUserInfo } from "../features/user/userSlice";
 import { discountedPrice } from "../app/constants";
@@ -15,13 +15,13 @@ export default function Checkout() {
   const user = useSelector(selectUserInfo);
   const items = useSelector(selectItems);
   const currentOrder = useSelector(selectCurrentOrder);
-  const totalAmount = items.reduce((amount, item) => discountedPrice(item) * item.quantity + amount, 0 );
+  const totalAmount = items.reduce((amount, item) => discountedPrice(item.product) * item.quantity + amount, 0 );
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
 
   const handleQuantity = (e, item) => {
-    dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
+    dispatch(updateCartAsync({ id:item.id, quantity: +e.target.value }));
   };
   const handleRemove = (e, id) => {
     dispatch(deleteItemFromCartAsync(id));
@@ -34,7 +34,7 @@ export default function Checkout() {
   };
   const handleOrder = (e) => {
     if (selectedAddress && paymentMethod) {
-      const order = { items, totalAmount, totalItems, user, paymentMethod, selectedAddress, status: "pending"};
+      const order = { items, totalAmount, totalItems, user:user.id, paymentMethod, selectedAddress, status: "pending"};
       dispatch(createOrderAsync(order));
     } else {
       alert("Enter Address and Payment method");
@@ -366,8 +366,8 @@ export default function Checkout() {
                       <li key={item.id} className="flex py-6">
                         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                           <img
-                            src={item.thumbnail}
-                            alt={item.title}
+                            src={item.product.thumbnail}
+                            alt={item.product.title}
                             className="h-full w-full object-cover object-center"
                           />
                         </div>
@@ -376,12 +376,12 @@ export default function Checkout() {
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <h3>
-                                <a href={item.href}>{item.title}</a>
+                                <a href={item.product.href}>{item.product.title}</a>
                               </h3>
-                              <p className="ml-4">{discountedPrice(item)}</p>
+                              <p className="ml-4">{discountedPrice(item.product)}</p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">
-                              {item.brand}
+                              {item.product.brand}
                             </p>
                           </div>
                           <div className="flex flex-1 items-end justify-between text-sm">

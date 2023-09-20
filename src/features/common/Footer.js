@@ -9,7 +9,7 @@ export default function Footer() {
             <h3 className="text-xl mb-1"> Download our Ecommerce app </h3>
             <p> Buy What You Want </p>
             <div className="flex justify-center my-4">
-              <div className="flex items-center border w-auto rounded-lg px-2 py-1 w-52 mx-2">
+              <div className="flex items-center border rounded-lg px-2 py-1 w-52 mx-2">
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/888/888857.png"
                   className="w-7 md:w-8"
@@ -20,7 +20,7 @@ export default function Footer() {
                   <p className="text-sm md:text-base"> Google Play Store </p>
                 </div>
               </div>
-              <div className="flex items-center border w-auto rounded-lg px-2 py-1 w-44 mx-2">
+              <div className="flex items-center border  rounded-lg px-2 py-1 w-44 mx-2">
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/888/888841.png"
                   className="w-7 md:w-8"

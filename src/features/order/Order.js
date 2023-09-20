@@ -1,9 +1,5 @@
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { increment, incrementAsync } from "./orderSlice";
+import React from "react";
 
 export default function order() {
-  // const dispatch = useDispatch();
-
   return <div></div>;
 }

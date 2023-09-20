@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchAllProducts, fetchProductsByFilter, fetchBrands, fetchCategories, fetchProductById, createProduct, updateProduct,} from "./productAPI";
+import { fetchAllProducts, fetchProducts, fetchBrands, fetchCategories, fetchProductById, createProduct, updateProduct,} from "./productAPI";
 
 const initialState = {
   products: [],
@@ -10,18 +10,18 @@ const initialState = {
   status: "idle",
 };
 
-export const fetchAllProductsAsync = createAsyncThunk(
-  "product/fetchAllProducts",
-  async () => {
-    const response = await fetchAllProducts();
-    return response.data;
-  }
-);
+// export const fetchAllProductsAsync = createAsyncThunk(
+//   "product/fetchAllProducts",
+//   async () => {
+//     const response = await fetchAllProducts();
+//     return response.data;
+//   }
+// );
 
-export const fetchProductsByFiltersAsync = createAsyncThunk(
-  "product/fetchProductsByFilter",
+export const fetchProductsAsync = createAsyncThunk(
+  "product/fetchProducts",
   async ({ filter, sort, pagination }) => {
-    const response = await fetchProductsByFilter(filter, sort, pagination);
+    const response = await fetchProducts(filter, sort, pagination);
     return response.data;
   }
 );
@@ -75,17 +75,17 @@ export const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllProductsAsync.pending, (state) => {
+      // .addCase(fetchAllProductsAsync.pending, (state) => {
+      //   state.status = "loading";
+      // })
+      // .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
+      //   state.status = "idle";
+      //   state.products = action.payload;
+      // })
+      .addCase(fetchProductsAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.products = action.payload;
-      })
-      .addCase(fetchProductsByFiltersAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchProductsByFiltersAsync.fulfilled, (state, action) => {
+      .addCase(fetchProductsAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.products = action.payload.products;
         state.totalItems = action.payload.totalItems;

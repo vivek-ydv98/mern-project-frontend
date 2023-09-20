@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {selectAllProducts,selectTotalItems,fetchProductsByFiltersAsync,selectBrands,selectCategories,fetchCategoriesAsync,fetchBrandsAsync} from "../../product/productSlice";
+import {selectAllProducts,selectTotalItems,fetchProductsAsync,selectBrands,selectCategories,fetchCategoriesAsync,fetchBrandsAsync} from "../../product/productSlice";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, StarIcon} from "@heroicons/react/20/solid";
@@ -68,7 +68,7 @@ export default function AdminProductList() {
 
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
-    dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }));
+    dispatch(fetchProductsAsync({ filter, sort, pagination }));
   }, [dispatch, filter, sort, page]);
 
   useEffect(() => {

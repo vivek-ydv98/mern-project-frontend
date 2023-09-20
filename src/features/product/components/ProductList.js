@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {selectAllProducts,selectTotalItems,fetchProductsByFiltersAsync,selectBrands,selectCategories,fetchCategoriesAsync,fetchBrandsAsync, selectedProductListStatus} from "../productSlice";
+import {selectAllProducts,selectTotalItems,fetchProductsAsync,selectBrands,selectCategories,fetchCategoriesAsync,fetchBrandsAsync, selectedProductListStatus} from "../productSlice";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {ChevronDownIcon,FunnelIcon,MinusIcon,PlusIcon,Squares2X2Icon,StarIcon} from "@heroicons/react/20/solid";
@@ -65,7 +65,7 @@ export default function ProductList() {
 
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
-    dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }));
+    dispatch(fetchProductsAsync({ filter, sort, pagination }));
   }, [dispatch, filter, sort, page]);
 
   useEffect(() => {
@@ -371,8 +371,8 @@ function ProductGrid({ products,status }) {
           color="#00BFFF"    
         />
         }  
-          {products.map((product) => (
-            <Link to={"/product-detail/" + product.id} key={product.id}>
+          {products.map((product,index) => (
+            <Link to={"/product-detail/" + product.id} key={index}>
               <div className="group relative border-solid border-2 border-gray-200 p-2">
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                   <img
@@ -396,7 +396,7 @@ function ProductGrid({ products,status }) {
                   </div>
                   <div>
                     <p className="text-sm block font-medium text-gray-900">
-                      $ {discountedPrice(product)}
+                      ${discountedPrice(product)}
                     </p>
                     <p className="text-sm block line-through font-medium text-gray-400">
                       ${product.price}

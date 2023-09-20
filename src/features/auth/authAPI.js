@@ -1,6 +1,6 @@
 export function createUser(userData) {
   return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8080/users", {
+    const response = await fetch("http://localhost:8080/auth/signup", {
       method: "POST",
       body: JSON.stringify(userData),
       headers: { "content-type": "application/json" },
@@ -11,20 +11,23 @@ export function createUser(userData) {
 }
 
 export function checkUser(loginInfo) {
-  const email = loginInfo.email;
-  const password = loginInfo.password;
-  
   return new Promise(async (resolve, reject) => {
-    const response = await fetch("http://localhost:8080/users?email=" + email);
-    const data = await response.json();
-    if (data.length) {
-      if (password === data[0].password) {
-        resolve({ data: data[0] });
+    try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        body: JSON.stringify(loginInfo),
+        headers: { "content-type": "application/json" },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        resolve({ data });
       } else {
-        reject({ message: "wrong credential" });
+        const err = await response.json();
+        console.log(err);
+        reject(err);
       }
-    } else {
-      reject({ message: "wrong credential" });
+    } catch (error) {
+      reject(error);
     }
   });
 }
