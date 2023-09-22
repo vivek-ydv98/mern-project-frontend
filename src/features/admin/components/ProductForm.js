@@ -12,6 +12,7 @@ import {
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../../common/Modal";
+import { useAlert } from "react-alert";
 
 export default function ProductForm() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function ProductForm() {
   const params = useParams();
   const selectedProduct = useSelector(selectedProductById);
   const [openModal, setOpenModal] = useState(null);
+  const alert =useAlert();
 
   useEffect(() => {
     if (params.id) {
@@ -84,9 +86,11 @@ export default function ProductForm() {
             product.id = params.id;
             product.rating = selectedProduct.rating || 0;
             dispatch(updateProductAsync(product));
+              alert.success("Product Updated Successfully");
             reset();
           } else {
             dispatch(createProductAsync(product));
+            alert.success("Product Created Successfully");
             reset();
           }
         })}
@@ -514,6 +518,7 @@ export default function ProductForm() {
           </button>
         </div>
       </form>
+      {selectedProduct && 
       <Modal
         title={`Delete ${selectedProduct?.title}`}
         message={"Are You Sure Want To Delete This Cart Item"}
@@ -522,7 +527,7 @@ export default function ProductForm() {
         dangerAction={handleDelete}
         cancelAction={(e) => setOpenModal(null)}
         showModal={openModal}
-      ></Modal>
+      ></Modal>}
     </div>
   );
 }

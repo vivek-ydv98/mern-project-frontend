@@ -174,7 +174,7 @@ export default function Navbar({ children }) {
                       <img
                         className="h-10 w-10 rounded-full"
                         src={user.imageUrl}
-                        alt=""
+                        alt={user.imageUrl}
                       />
                     </div>
                     <div className="ml-3">

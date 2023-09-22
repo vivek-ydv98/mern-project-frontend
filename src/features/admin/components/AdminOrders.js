@@ -10,11 +10,11 @@ export default function AdminOrders() {
   const [page, setPage] = useState(1);
   const orders = useSelector(selectAllOrders);
   const totalOrders = useSelector(selectTotalOrders);
-  const [editableOrderId, seteditableOrderId] = useState(-1);
+  const [editableOrderId, setEditableOrderId] = useState(-1);
   const [sort, setSort] = useState({});
 
   const handleEdit = (order) => {
-    seteditableOrderId(order.id);
+    setEditableOrderId(order.id);
   };
 
   const chooseColor = (state) => {
@@ -35,7 +35,7 @@ export default function AdminOrders() {
   const handleUpdateStatus = (e, order) => {
     const updateOrderStatus = { ...order, status: e.target.value };
     dispatch(updateOrderAsync(updateOrderStatus));
-    seteditableOrderId(-1);
+    setEditableOrderId(-1);
   };
 
   const handleShow = (order) => {};
@@ -62,27 +62,11 @@ export default function AdminOrders() {
               <table className="min-w-max w-full table-auto">
                 <thead>
                   <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                    <th
-                      className="py-3 px-6 text-left cursor-pointer"
-                      onClick={(e) =>
-                        handleSort({
-                          sortField: "id",
-                          sortOrder: sort?._order === "asc" ? "desc" : "asc",
-                        })
-                      }
-                    >
-                      Order ID
-                      {sort._sort === "totalAmount" && sort._order === "asc" ? (
-                        <ArrowUpIcon className="w-4 h-4"></ArrowUpIcon>
-                      ) : (
-                        <ArrowDownIcon className="w-4 h-4"></ArrowDownIcon>
-                      )}
-                    </th>
+                    <th className="py-3 px-6 text-left cursor-pointer"> Order ID </th>
                     <th className="py-3 px-6 text-left">Items</th>
                     <th className="py-3 px-5 text-center"> Quantity/Amount</th>
-                    <th className="py-3 px-5 text-center">
                     <th
-                      className="py-3 px-6 text-left cursor-pointer"
+                      className="py-3 px-5 text-left cursor-pointer"
                       onClick={(e) =>
                         handleSort({
                           sortField: "totalAmount",
@@ -91,12 +75,11 @@ export default function AdminOrders() {
                       }
                     >
                      Total Amount
-                      {sort._sort === "id" && sort._order === "asc" ? (
+                      {sort._sort === "totalAmount" && sort._order === "asc" ? (
                         <ArrowUpIcon className="w-4 h-4"></ArrowUpIcon>
                       ) : (
                         <ArrowDownIcon className="w-4 h-4"></ArrowDownIcon>
                       )}
-                    </th>
                     </th>
                     <th className="py-3 px-5 text-center">Shipping Address</th>
                     <th className="py-3 px-5 text-center">Status</th>
@@ -117,26 +100,26 @@ export default function AdminOrders() {
                           </div>
                         </td>
                         <td className="py-3 px-4 text-left">
-                          {order.items.map((product, index) => (
+                          {order.items.map((item, index) => (
                             <div key={index} className="flex items-center">
                               <div className="mr-2">
                                 <img
                                   className="w-6 h-6 rounded-full"
-                                  src={product.thumbnail}
-                                  alt=""
+                                  src={item.product.thumbnail}
+                                  alt={item.product.title}
                                 />
                               </div>
-                              <span>{product.title}</span>
+                              <span>{item.product.title}</span>
                             </div>
                           ))}
                         </td>
                         <td className="py-3 px-4 text-center">
-                          {order.items.map((product, index) => (
+                          {order.items.map((item, index) => (
                             <div
                               key={index}
                               className="flex items-center justify-center"
                             >
-                              {product.quantity} - ${discountedPrice(product)}
+                              {item.quantity} - ${discountedPrice(item.product)}
                             </div>
                           ))}
                         </td>
