@@ -5,10 +5,10 @@ import { Navigate } from "react-router-dom";
 
 export default function Logout({}) {
   const dispatch = useDispatch();
-  const loggedInUser = useSelector(selectLoggedInUser);
+  const user = useSelector(selectLoggedInUser);
   useEffect(() => {
     dispatch(signOutAsync());
   });
-  
-  return <>{!loggedInUser && <Navigate to={"/"} replace={true}></Navigate>}</>;
+
+  return <>{!user && <Navigate to={"/"} replace={true}></Navigate>}</>;
 }

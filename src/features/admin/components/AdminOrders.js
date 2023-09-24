@@ -62,11 +62,11 @@ export default function AdminOrders() {
               <table className="min-w-max w-full table-auto">
                 <thead>
                   <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                    <th className="py-3 px-6 text-left cursor-pointer"> Order ID </th>
-                    <th className="py-3 px-6 text-left">Items</th>
-                    <th className="py-3 px-5 text-center"> Quantity/Amount</th>
+                    <th className="py-3 px-4 text-left cursor-pointer"> Order ID </th>
+                    <th className="py-3 px-4 text-left">Items</th>
+                    <th className="py-3 px-4 text-center"> Quantity/Amount</th>
                     <th
-                      className="py-3 px-5 text-left cursor-pointer"
+                      className="py-3 px-4 text-left cursor-pointer"
                       onClick={(e) =>
                         handleSort({
                           sortField: "totalAmount",
@@ -81,9 +81,9 @@ export default function AdminOrders() {
                         <ArrowDownIcon className="w-4 h-4"></ArrowDownIcon>
                       )}
                     </th>
-                    <th className="py-3 px-5 text-center">Shipping Address</th>
-                    <th className="py-3 px-5 text-center">Status</th>
-                    <th className="py-3 px-5 text-center">Actions</th>
+                    <th className="py-3 px-4 text-center">Shipping Address</th>
+                    <th className="py-3 px-4 text-center">Status</th>
+                    <th className="py-3 px-4 text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="text-gray-600 text-sm font-light">
@@ -95,7 +95,7 @@ export default function AdminOrders() {
                       >
                         <td className="py-3 px-4 text-left whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="mr-2"></div>
+                            {/* <div className="mr-2"></div> */}
                             <span className="font-medium">{order.id}</span>
                           </div>
                         </td>

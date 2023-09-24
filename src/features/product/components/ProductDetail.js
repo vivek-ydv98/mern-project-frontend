@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectedProductById, fetchProductByIdAsync, selectedProductListStatus } from "../productSlice";
+import {selectedProductById,fetchProductByIdAsync,selectedProductListStatus} from "../productSlice";
 import { useParams } from "react-router-dom";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
-import { selectLoggedInUser } from "../../auth/authSlice";
 import { discountedPrice } from "../../../app/constants";
 
 import { useAlert } from "react-alert";
 import { InfinitySpin } from "react-loader-spinner";
-
 
 const colors = [
   { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
@@ -46,16 +44,14 @@ export default function ProductDetail() {
   const product = useSelector(selectedProductById);
   const dispatch = useDispatch();
   const params = useParams();
-  const user = useSelector(selectLoggedInUser);
   const cartItems = useSelector(selectItems);
   const alert = useAlert();
-  const status= useSelector(selectedProductListStatus)
-
+  const status = useSelector(selectedProductListStatus);
 
   const handleCart = (e) => {
     e.preventDefault();
     if (cartItems.findIndex((items) => items.product.id === product.id) < 0) {
-      const newItem = {product: product.id,quantity: 1,user: user.id};
+      const newItem = { product: product.id, quantity: 1 };
       dispatch(addToCartAsync(newItem));
       alert.success("Item Added to Cart");
     } else {
@@ -69,12 +65,7 @@ export default function ProductDetail() {
 
   return (
     <div className="bg-white">
-    {status ==="loading" && 
-            <InfinitySpin
-              width='200'
-              color="#00BFFF"    
-            />
-           }  
+      {status === "loading" && <InfinitySpin width="200" color="#00BFFF" />}
       {product ? (
         <div className="pt-2 mx-auto max-w-7xl px-4 sm:px-6 lg:px-20">
           <nav aria-label="Breadcrumb">

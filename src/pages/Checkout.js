@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteItemFromCartAsync, selectItems, updateCartAsync,} from "../features/cart/cartSlice";
+import { deleteItemFromCartAsync, selectCartLoaded, selectItems, updateCartAsync,} from "../features/cart/cartSlice";
 import { useForm } from "react-hook-form";
 import { updateUserAsync } from "../features/user/userSlice";
 import {createOrderAsync,selectCurrentOrder,} from "../features/order/orderSlice";
@@ -14,6 +14,7 @@ export default function Checkout() {
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo);
   const items = useSelector(selectItems);
+  const cartLoaded = useSelector(selectCartLoaded)
   const currentOrder = useSelector(selectCurrentOrder);
   const totalAmount = items.reduce((amount, item) => discountedPrice(item.product) * item.quantity + amount, 0 );
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -46,13 +47,8 @@ export default function Checkout() {
 
   return (
     <div>
-      {!items.length && <Navigate to={"/"} replace={true}></Navigate>}
-      {currentOrder && (
-        <Navigate
-          to={"/order-success/" + currentOrder.id}
-          replace={true}
-        ></Navigate>
-      )}
+      {cartLoaded && !items.length && <Navigate to={"/"} replace={true}></Navigate>}
+      {currentOrder && (<Navigate to={"/order-success/" + currentOrder.id} replace={true} ></Navigate>)}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-20">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3 border-t border-gray-200 bg-white px-5 py-3 mt-4">
@@ -60,12 +56,7 @@ export default function Checkout() {
               // className="bg-white px-5 py-3 mt-4"
               noValidate
               onSubmit={handleSubmit((data) => {
-                dispatch(
-                  updateUserAsync({
-                    ...user,
-                    addresses: [...user.addresses, data],
-                  })
-                );
+                dispatch( updateUserAsync({...user, addresses: [...user.addresses, data]}));
                 reset();
               })}
             >
@@ -259,10 +250,10 @@ export default function Checkout() {
                 Address
               </h2>
               <p className="mt-1 text-sm leading-6 text-gray-600">
-                Choose from exesting addresses
+              {user?.addresses.length>=1? "Choose From Exesting Addresses":"Add an Address"}
               </p>
               <ul role="list">
-                {user.addresses.map((address, index) => (
+                {user?.addresses && user.addresses.map((address, index) => (
                   <li
                     key={index}
                     className="flex justify-between gap-x-6 mt-1 py-2 px-3 rounded border-solid border-2 border-gray-200 "

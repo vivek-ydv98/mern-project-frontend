@@ -1,28 +1,23 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {fetchLoggedInUserOrdersAsync,selectUserInfo,selectUserOrders,} from "../userSlice";
+import { fetchLoggedInUserOrdersAsync, selectUserInfoStatus, selectUserOrders} from "../userSlice";
 import { discountedPrice } from "../../../app/constants";
-import { Navigate } from "react-router-dom";
+import { InfinitySpin } from "react-loader-spinner";
 
 export default function UserOrders() {
   const dispatch = useDispatch();
-  const userInfo = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
-  // console.log(user)
-  // console.log(orders)
+  const status = useSelector(selectUserInfoStatus);
 
   useEffect(() => {
-    dispatch(fetchLoggedInUserOrdersAsync(userInfo.id));
-  }, [userInfo.id, dispatch]);
+    dispatch(fetchLoggedInUserOrdersAsync());
+  }, [dispatch]);
 
   return (
     <>
-      {/* {!orders.length && <Navigate to={"/"} replace={true}></Navigate>} */}
-       {orders.map((order, index) => (
-          <div
-            key={index}
-            className="mx-auto mt-2 bg-white max-w-5xl px-4 sm:px-6 lg:px-8"
-          >
+      {status === "loading" && <InfinitySpin width="200" color="#00BFFF" />}
+      {orders && orders.map((order, index) => (
+          <div key={index} className="mx-auto mt-2 bg-white max-w-5xl px-4 sm:px-6 lg:px-8">
             <div className="border-t border-gray-200 px-4 py-2 sm:px-10">
               <h1 className="text-2xl font-bold tracking-tight text-gray-900">
                 Order id # {order.id}
@@ -50,8 +45,7 @@ export default function UserOrders() {
                             <p className="ml-4">{discountedPrice(item.product)}</p>
                           </div>
                           <p className="mt-1 text-sm text-gray-500">
-                            {" "}
-                            {item.product.brand}{" "}
+                            {item.product.brand}
                           </p>
                         </div>
                         <div className="flex flex-1 items-end justify-between text-sm">

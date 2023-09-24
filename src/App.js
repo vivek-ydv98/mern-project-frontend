@@ -21,17 +21,14 @@ import CartPage from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
 import Logout from "./features/auth/components/Logout";
 import Home from "./pages/Home";
-import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
+import { fetchCartItemsAsync } from "./features/cart/cartSlice";
 import { fetchLoggedInUserAsync } from "./features/user/userSlice";
-import { selectLoggedInUser } from "./features/auth/authSlice";
+import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from "./features/auth/authSlice";
 
 import { positions, Provider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 
-const options = {
-  timeout: 5000,
-  position: positions.TOP_CENTER,
-};
+const options = {timeout: 5000, position: positions.TOP_CENTER};
 
 const router = createBrowserRouter([
   {
@@ -151,17 +148,26 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
+  const userChecked = useSelector(selectUserChecked);
+
+  useEffect(() => {
+    dispatch(checkAuthAsync());
+  }, [dispatch]);
+
   useEffect(() => {
     if (user) {
-      dispatch(fetchItemsByUserIdAsync(user.id));
-      dispatch(fetchLoggedInUserAsync(user.id));
+      dispatch(fetchCartItemsAsync());
+      dispatch(fetchLoggedInUserAsync());
     }
   }, [dispatch, user]);
+
   return (
     <div className="App">
-      <Provider template={AlertTemplate} {...options}>
-        <RouterProvider router={router} />
-      </Provider>
+      {userChecked && (
+        <Provider template={AlertTemplate} {...options}>
+          <RouterProvider router={router} />
+        </Provider>
+      )}
     </div>
   );
 }
