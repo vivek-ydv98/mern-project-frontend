@@ -23,12 +23,14 @@ import Logout from "./features/auth/components/Logout";
 import Home from "./pages/Home";
 import { fetchCartItemsAsync } from "./features/cart/cartSlice";
 import { fetchLoggedInUserAsync } from "./features/user/userSlice";
-import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from "./features/auth/authSlice";
+import {checkAuthAsync,selectLoggedInUser,selectUserChecked,
+} from "./features/auth/authSlice";
 
 import { positions, Provider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
+import StripeCheckout from "./pages/StripeCheckouts";
 
-const options = {timeout: 5000, position: positions.TOP_CENTER};
+const options = { timeout: 5000, position: positions.TOP_CENTER };
 
 const router = createBrowserRouter([
   {
@@ -115,7 +117,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/orders",
+    path: "/my-orders",
     element: (
       <Protected>
         <UserOrdersPage></UserOrdersPage>
@@ -127,6 +129,14 @@ const router = createBrowserRouter([
     element: (
       <Protected>
         <UserProfilePage></UserProfilePage>
+      </Protected>
+    ),
+  },
+  {
+    path: "/stripe-checkout",
+    element: (
+      <Protected>
+        <StripeCheckout></StripeCheckout>
       </Protected>
     ),
   },
