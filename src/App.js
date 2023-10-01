@@ -29,6 +29,7 @@ import {checkAuthAsync,selectLoggedInUser,selectUserChecked,
 import { positions, Provider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import StripeCheckout from "./pages/StripeCheckouts";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const options = { timeout: 5000, position: positions.TOP_CENTER };
 
@@ -151,6 +152,10 @@ const router = createBrowserRouter([
   {
     path: "/forgot-password",
     element: <ForgotPasswordPage></ForgotPasswordPage>,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPasswordPage></ResetPasswordPage>,
   },
   { path: "*", element: <PageNotFound></PageNotFound> },
 ]);
