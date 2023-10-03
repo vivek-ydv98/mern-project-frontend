@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllOrdersAsync, selectAllOrders, selectTotalOrders, updateOrderAsync} from "../../order/orderSlice";
+import {
+  fetchAllOrdersAsync,
+  selectAllOrders,
+  selectTotalOrders,
+  updateOrderAsync,
+} from "../../order/orderSlice";
 import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
-import { EyeIcon, PencilIcon, ArrowDownIcon, ArrowUpIcon} from "@heroicons/react/24/outline";
+import {
+  EyeIcon,
+  PencilIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
+} from "@heroicons/react/24/outline";
 import Pagination from "../../common/Pagination";
 
 export default function AdminOrders() {
@@ -69,10 +79,13 @@ export default function AdminOrders() {
               <table className="w-full table-auto">
                 <thead>
                   <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                    <th className="py-3 px-4 text-left cursor-pointer"> Order ID </th>
-                    <th className="py-3 px-4 text-left">Items</th>
+                    <th className="py-1 px-1 text-left cursor-pointer">
+                      {" "}
+                      Order ID{" "}
+                    </th>
+                    <th className="py-1 px-1 text-left">Items</th>
                     <th
-                      className="py-3 px-4 text-left cursor-pointer"
+                      className="py-1 px-1 text-left cursor-pointer"
                       onClick={(e) =>
                         handleSort({
                           sortField: "totalAmount",
@@ -80,18 +93,42 @@ export default function AdminOrders() {
                         })
                       }
                     >
-                     Total Amount
+                      Total Amount
                       {sort._sort === "totalAmount" && sort._order === "asc" ? (
                         <ArrowUpIcon className="w-4 h-4"></ArrowUpIcon>
                       ) : (
                         <ArrowDownIcon className="w-4 h-4"></ArrowDownIcon>
                       )}
                     </th>
-                    <th className="py-3 px-4 text-center">Shipping Address</th>
-                    <th className="py-3 px-4 text-center">Order Status</th>
-                    <th className="py-3 px-4 text-center">Payment Method</th>
-                    <th className="py-3 px-4 text-center">Payment Status</th>
-                    <th className="py-3 px-4 text-center">Actions</th>
+                    <th className="py-1 px-1 text-center">Shipping Address</th>
+                    <th className="py-1 px-1 text-center">Order Status</th>
+                    <th className="py-1 px-1 text-center">Payment Method</th>
+                    <th className="py-1 px-1 text-center">Payment Status</th>
+                    <th
+                      className="py-1 px-1 text-left cursor-pointer"
+                      onClick={(e) =>
+                        handleSort({
+                          sortField: "createdAt",
+                          sortOrder: sort?._order === "asc" ? "desc" : "asc",
+                        })
+                      }
+                    >
+                      Order Time
+                      {sort._sort === "createdAt" && sort._order === "asc" ? (
+                        <ArrowUpIcon className="w-4 h-4"></ArrowUpIcon>
+                      ) : (
+                        <ArrowDownIcon className="w-4 h-4"></ArrowDownIcon>
+                      )}
+                    </th>
+                    <th className="py-1 px-1 text-left cursor-pointer" onClick={(e) => handleSort({ sortField: "updatedAt", sortOrder: sort?._order === "asc" ? "desc" : "asc",})}>
+                      Last Updated
+                      {sort._sort === "updatedAt" && sort._order === "asc" ? (
+                        <ArrowUpIcon className="w-4 h-4"></ArrowUpIcon>
+                      ) : (
+                        <ArrowDownIcon className="w-4 h-4"></ArrowDownIcon>
+                      )}
+                    </th>
+                    <th className="py-1 px-1 text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="text-gray-600 text-sm font-light">
@@ -101,33 +138,32 @@ export default function AdminOrders() {
                         key={order.id}
                         className="border-b border-gray-200 hover:bg-gray-100"
                       >
-                        <td className="py-3 px-4 text-left whitespace-nowrap">
+                        <td className="py-3 px-1 text-left whitespace-nowrap">
                           <div className="flex items-center">
                             {/* <div className="mr-2"></div> */}
                             <span className="font-medium">{order.id}</span>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-left">
+                        <td className="py-3 px-1 text-left">
                           {order.items.map((item, index) => (
                             <div key={index} className="flex items-center">
                               <div className="mr-2">
-                                <img
-                                  className="w-6 h-6 rounded-full"
-                                  src={item.product.thumbnail}
-                                  alt={item.product.title}
-                                />
+                                <img className="w-6 h-6 rounded-full" src={item.product.thumbnail} alt={item.product.title}/>
                               </div>
-                              <span>{item.product.title} - #{item.quantity} - ${discountedPrice(item.product)}</span>
+                              <span>
+                                {item.product.title} - #{item.quantity} - $
+                                {discountedPrice(item.product)}
+                              </span>
                             </div>
                           ))}
                         </td>
-                      
-                        <td className="py-3 px-4 text-center">
+
+                        <td className="py-3 px-1 text-center">
                           <div className="flex items-center justify-center">
                             $ {order.totalAmount}
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-3 px-1 text-center">
                           <div className="">
                             <div>
                               <strong>{order.selectedAddress.name}</strong>
@@ -138,7 +174,7 @@ export default function AdminOrders() {
                             <div>{order.selectedAddress.phone}</div>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-3 px-1 text-center">
                           {order.id === editableOrderId ? (
                             <select
                               value={order.status}
@@ -160,44 +196,38 @@ export default function AdminOrders() {
                             </span>
                           )}
                         </td>
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-3 px-1 text-center">
                           <div className="flex items-center justify-center">
                             {order.paymentMethod}
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-3 px-1 text-center">
                           {order.id === editableOrderId ? (
-                            <select
-                              value={order.paymentStatus}
-                              className="rounded-lg shadow-md"
-                              onChange={(e) => handleOrderPaymentStatus(e, order)}
-                            >
+                            <select value={order.paymentStatus} className="rounded-lg shadow-md" onChange={(e) => handleOrderPaymentStatus(e, order)}>
                               <option value="pending">Pending</option>
                               <option value="received">Received</option>
                             </select>
                           ) : (
-                            <span
-                              className={`${chooseColor(
-                                order.paymentStatus
-                              )} py-1 px-3 rounded-full text-xs`}
-                            >
-                              {order.paymentStatus}
-                            </span>
+                            <span className={`${chooseColor(order.paymentStatus)} py-1 px-3 rounded-full text-xs`}>{order.paymentStatus}</span>
                           )}
                         </td>
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-3 px-1 text-center">
+                          <div className="flex items-center justify-center">
+                            {order.createdAt ? new Date(order.createdAt).toLocaleString() : null}
+                          </div>
+                        </td>
+                        <td className="py-3 px-1 text-center">
+                          <div className="flex items-center justify-center">
+                            {order.updatedAt ? new Date(order.updatedAt).toLocaleString() : null}
+                          </div>
+                        </td>
+                        <td className="py-3 px-1 text-center">
                           <div className="flex item-center justify-center">
                             <div className="w-6 mr-4 cursor-pointer transform hover:text-purple-500 hover:scale-110">
-                              <EyeIcon
-                                className="w-6 h-6"
-                                onClick={(e) => handleShow(order)}
-                              ></EyeIcon>
+                              <EyeIcon className="w-6 h-6" onClick={(e) => handleShow(order)}></EyeIcon>
                             </div>
                             <div className="w-6 mr-1 cursor-pointer transform hover:text-purple-500 hover:scale-110">
-                              <PencilIcon
-                                className="w-6 h-6"
-                                onClick={(e) => handleEdit(order)}
-                              ></PencilIcon>
+                              <PencilIcon className="w-6 h-6" onClick={(e) => handleEdit(order)}></PencilIcon>
                             </div>
                           </div>
                         </td>
@@ -208,12 +238,7 @@ export default function AdminOrders() {
             </div>
           </div>
         </div>
-        <Pagination
-          page={page}
-          setPage={setPage}
-          handlePage={handlePage}
-          totalItems={totalOrders}
-        ></Pagination>
+        <Pagination page={page} setPage={setPage} handlePage={handlePage} totalItems={totalOrders}></Pagination>
       </div>
     </>
   );

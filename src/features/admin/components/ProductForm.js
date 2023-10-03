@@ -29,7 +29,24 @@ export default function ProductForm() {
   const params = useParams();
   const selectedProduct = useSelector(selectedProductById);
   const [openModal, setOpenModal] = useState(null);
-  const alert =useAlert();
+  const alert = useAlert();
+
+  const colors = [
+    { name: "White", class: "bg-white", selectedClass: "ring-gray-400" , id: "white",},
+    { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400", id:"gray" },
+    { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900", id:"black" },
+  ];
+
+  const sizes = [
+    { name: "XXS", inStock: false, id:"xxs"},
+    { name: "XS", inStock: true, id:"xs"},
+    { name: "S", inStock: true, id:"s"},
+    { name: "M", inStock: true, id:"m"},
+    { name: "L", inStock: true, id:"l"},
+    { name: "XL", inStock: true, id:"xl"},
+    { name: "2XL", inStock: true, id:"2xl"},
+    { name: "3XL", inStock: true, id:"3xl"},
+  ];
 
   useEffect(() => {
     if (params.id) {
@@ -53,6 +70,12 @@ export default function ProductForm() {
       setValue("image2", selectedProduct.images[1]);
       setValue("image3", selectedProduct.images[2]);
       setValue("image4", selectedProduct.images[3]);
+      setValue("highlight1", selectedProduct.highlights[0]);
+      setValue("highlight2", selectedProduct.highlights[1]);
+      setValue("highlight3", selectedProduct.highlights[2]);
+      setValue("highlight4", selectedProduct.highlights[3]);
+      setValue("sizes", selectedProduct.sizes.map(size=>size.id));
+      setValue("colors", selectedProduct.colors.map(color=>color.id));
     }
   }, [selectedProduct, params.id, setValue]);
 
@@ -67,6 +90,7 @@ export default function ProductForm() {
       <form
         noValidate
         onSubmit={handleSubmit((data) => {
+   console.log(data)
           const product = { ...data };
           product.images = [
             product.image1,
@@ -74,7 +98,15 @@ export default function ProductForm() {
             product.image3,
             product.image4,
           ];
+          product.highlights = [
+            product.highlight1,
+            product.highlight2,
+            product.highlight3,
+            product.highlight4,
+          ];
           product.rating = 0;
+          product.colors=product.colors.map(color=>colors.find(clr=>clr.id===color))
+          product.sizes=product.sizes.map(size=>sizes.find(sze=>sze.id===size))
           product.price = +product.price;
           product.stock = +product.stock;
           product.discountPercentage = +product.discountPercentage;
@@ -82,11 +114,17 @@ export default function ProductForm() {
           delete product["image2"];
           delete product["image3"];
           delete product["image4"];
+
+          delete product["highlight1"];
+          delete product["highlight2"];
+          delete product["highlight3"];
+          delete product["highlight4"];
+          console.log(product)
           if (params.id) {
             product.id = params.id;
             product.rating = selectedProduct.rating || 0;
             dispatch(updateProductAsync(product));
-              alert.success("Product Updated Successfully");
+            alert.success("Product Updated Successfully");
             reset();
           } else {
             dispatch(createProductAsync(product));
@@ -103,7 +141,9 @@ export default function ProductForm() {
 
             <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-6">
               <div className="sm:col-span-4">
-                {selectedProduct?.deleted && <h3 className="text-red-500">This Product is Deleted</h3>}
+                {selectedProduct?.deleted && (
+                  <h3 className="text-red-500">This Product is Deleted</h3>
+                )}
                 <label
                   htmlFor="title"
                   className="block text-sm font-medium leading-6 text-gray-900"
@@ -142,8 +182,8 @@ export default function ProductForm() {
                     })}
                   >
                     <option value="">--Choose Brand--</option>
-                    {brands.map((brand) => (
-                      <option key={brand.label} value={brand.value}>
+                    {brands.map((brand,index) => (
+                      <option key={index} value={brand.value}>
                         {brand.label}
                       </option>
                     ))}
@@ -169,8 +209,8 @@ export default function ProductForm() {
                     })}
                   >
                     <option value="">--Choose Categories--</option>
-                    {categories.map((category) => (
-                      <option key={category.label} value={category.value}>
+                    {categories.map((category,index) => (
+                      <option key={index} value={category.value}>
                         {category.label}
                       </option>
                     ))}
@@ -178,6 +218,50 @@ export default function ProductForm() {
                   {errors.category && (
                     <p className="text-red-500">{errors.category.message}</p>
                   )}
+                </div>
+              </div>
+
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="colors"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Colors
+                </label>
+                <div className="mt-2">
+                  {colors.map((color, index) => (
+                    <span  key={index}>
+                      <input
+                        type="checkbox"
+                        {...register("colors")}
+                        className="rounded mr-1"
+                        value={color.id}
+                      />
+                      <label htmlFor="colors" className=" mr-4 text-sm font-medium leading-6 text-gray-900">{color.name}</label>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="sizes"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Sizes
+                </label>
+                <div className="mt-2">
+                  {sizes.map((size, index) => (
+                    <span key={index}>
+                      <input
+                        type="checkbox"
+                        {...register("sizes")}
+                        value={size.id}
+                        className="rounded mr-1"
+                      />
+                      <label htmlFor="colors" className=" mr-4 text-sm font-medium leading-6 text-gray-900">{size.name}</label>
+                    </span>
+                  ))}
                 </div>
               </div>
 
@@ -405,6 +489,102 @@ export default function ProductForm() {
                   )}
                 </div>
               </div>
+
+              <div className="sm:col-span-6">
+                <label
+                  htmlFor="highlight1"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Highlight 1
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                    <input
+                      type="text"
+                      {...register("highlight1", {
+                        required: "Image is required",
+                      })}
+                      id="highlight1"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                  {errors.highlight1 && (
+                    <p className="text-red-500">{errors.highlight1.message}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="sm:col-span-6">
+                <label
+                  htmlFor="highlight2"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Highlight 2
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                    <input
+                      type="text"
+                      {...register("highlight2", {
+                        required: "Image is required",
+                      })}
+                      id="highlight2"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                  {errors.highlight2 && (
+                    <p className="text-red-500">{errors.highlight2.message}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="sm:col-span-6">
+                <label
+                  htmlFor="highlight3"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Highlight 3
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                    <input
+                      type="text"
+                      {...register("highlight3", {
+                        required: "Image is required",
+                      })}
+                      id="highlight1"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                  {errors.highlight3 && (
+                    <p className="text-red-500">{errors.highlight3.message}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="sm:col-span-6">
+                <label
+                  htmlFor="highlight4"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Highlight 4
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                    <input
+                      type="text"
+                      {...register("highlight4", {
+                        required: "Image is required",
+                      })}
+                      id="highlight4"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                  {errors.highlight4 && (
+                    <p className="text-red-500">{errors.highlight4.message}</p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -518,16 +698,17 @@ export default function ProductForm() {
           </button>
         </div>
       </form>
-      {selectedProduct && 
-      <Modal
-        title={`Delete ${selectedProduct?.title}`}
-        message={"Are You Sure Want To Delete This Cart Item"}
-        dangerOption={"Delete"}
-        cancelOption={"Cancel"}
-        dangerAction={handleDelete}
-        cancelAction={(e) => setOpenModal(null)}
-        showModal={openModal}
-      ></Modal>}
+      {selectedProduct && (
+        <Modal
+          title={`Delete ${selectedProduct?.title}`}
+          message={"Are You Sure Want To Delete This Cart Item"}
+          dangerOption={"Delete"}
+          cancelOption={"Cancel"}
+          dangerAction={handleDelete}
+          cancelAction={(e) => setOpenModal(null)}
+          showModal={openModal}
+        ></Modal>
+      )}
     </div>
   );
 }

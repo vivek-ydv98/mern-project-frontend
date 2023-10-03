@@ -49,9 +49,20 @@ export function checkAuth() {
   });
 }
 
-export function signOut(userId) {
-  return new Promise(async (resolve) => {
-    resolve({ data: "success" });
+export function signOut() {
+  return new Promise(async (resolve,reject) => {
+    try {
+      const response = await fetch("/auth/logout");
+      if (response.ok) {
+      //  await response.json();
+        resolve({ data :"success"});
+      } else {
+        const err = await response.text();
+        reject(err);
+      }
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
