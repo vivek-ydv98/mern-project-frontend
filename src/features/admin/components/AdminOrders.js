@@ -6,7 +6,7 @@ import {
   selectTotalOrders,
   updateOrderAsync,
 } from "../../order/orderSlice";
-import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
+import { ITEMS_PER_PAGE } from "../../../app/constants";
 import {
   EyeIcon,
   PencilIcon,
@@ -152,7 +152,7 @@ export default function AdminOrders() {
                               </div>
                               <span>
                                 {item.product.title} - #{item.quantity} - $
-                                {discountedPrice(item.product)}
+                                {item.product.discountPrice}
                               </span>
                             </div>
                           ))}

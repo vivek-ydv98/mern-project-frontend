@@ -1,7 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { deleteItemFromCartAsync, selectCartLoaded, selectCartStatus, selectItems, updateCartAsync} from "./cartSlice";
 import { Link, Navigate } from "react-router-dom";
-import { discountedPrice } from "../../app/constants";
 import { InfinitySpin } from "react-loader-spinner";
 import Modal from "../common/Modal";
 import { useState } from "react";
@@ -13,7 +12,7 @@ export default function Cart() {
   const cartLoaded = useSelector(selectCartLoaded);
   const [openModal, setOpenModal] = useState(null);
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
-  const totalAmount = items.reduce( (amount, item) => discountedPrice(item.product) * item.quantity + amount, 0);
+  const totalAmount = items.reduce( (amount, item) => item.product.discountPrice * item.quantity + amount, 0);
 
   const handleQuantity = (e, item) => {
     dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }));
@@ -53,7 +52,7 @@ export default function Cart() {
                         <h3>
                           <a href={item.href}>{item.product.title}</a>
                         </h3>
-                        <p className="ml-4">{discountedPrice(item.product)}</p>
+                        <p className="ml-4">{item.product.discountPrice}</p>
                       </div>
                       <p className="mt-1 text-sm text-gray-500">
                         {item.product.brand}

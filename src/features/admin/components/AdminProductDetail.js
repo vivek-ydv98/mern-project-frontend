@@ -2,49 +2,46 @@ import React, { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductByIdAsync, selectedProductById} from "../../product/productSlice";
+import {
+  selectedProductById,
+  fetchProductByIdAsync,
+  selectedProductListStatus,
+} from "../../product/productSlice";
 import { useParams } from "react-router-dom";
-import { addToCartAsync } from "../../cart/cartSlice";
-import { discountedPrice } from "../../../app/constants";
+import { addToCartAsync, selectItems } from "../../cart/cartSlice";
 
-const colors = [
-  { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
-  { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
-  { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
-];
-const sizes = [
-  { name: "XXS", inStock: false },
-  { name: "XS", inStock: true },
-  { name: "S", inStock: true },
-  { name: "M", inStock: true },
-  { name: "L", inStock: true },
-  { name: "XL", inStock: true },
-  { name: "2XL", inStock: true },
-  { name: "3XL", inStock: true },
-];
-const highlights = [
-  "Hand cut and sewn locally",
-  "Dyed with our proprietary colors",
-  "Pre-washed & pre-shrunk",
-  "Ultra-soft 100% cotton",
-];
+import { useAlert } from "react-alert";
+import { InfinitySpin } from "react-loader-spinner";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function AdminProductDetail() {
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
-  const [selectedSize, setSelectedSize] = useState(sizes[2]);
+  const [selectedColor, setSelectedColor] = useState();
+  const [selectedSize, setSelectedSize] = useState();
   const product = useSelector(selectedProductById);
   const dispatch = useDispatch();
   const params = useParams();
+  const cartItems = useSelector(selectItems);
+  const alert = useAlert();
+  const status = useSelector(selectedProductListStatus);
 
   const handleCart = (e) => {
     e.preventDefault();
-    const newItem = { ...product, quantity: 1, };
-    delete newItem["id"];
-    dispatch(addToCartAsync(newItem));
+    if (cartItems.findIndex((items) => items.product.id === product.id) < 0) {
+      const newItem = { product: product.id, quantity: 1 };
+      if(selectedColor){
+        newItem.color=selectedColor
+      }
+      if(selectedSize){
+        newItem.size=selectedSize
+      }
+      dispatch(addToCartAsync(newItem));
+      alert.success("Item Added to Cart");
+    } else {
+      alert.error("Item Already Added");
+    }
   };
 
   useEffect(() => {
@@ -53,9 +50,9 @@ export default function AdminProductDetail() {
 
   return (
     <div className="bg-white">
+      {status === "loading" && <InfinitySpin width="200" color="#00BFFF" />}
       {product ? (
         <div className="pt-2 mx-auto max-w-7xl px-4 sm:px-6 lg:px-20">
-          {/* className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-20" */}
           <nav aria-label="Breadcrumb">
             <ol
               role="list"
@@ -123,7 +120,6 @@ export default function AdminProductDetail() {
             </div>
             <div className="aspect-h-2 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
               <img
-                // src={product.images[3]}
                 src={product.thumbnail}
                 alt={product.title}
                 className="h-full w-full object-cover object-center"
@@ -146,7 +142,7 @@ export default function AdminProductDetail() {
                 $ {product.price}
               </p>
               <p className="text-3xl tracking-tight text-gray-900">
-                $ {discountedPrice(product)}
+                $ {product.discountPrice}
               </p>
 
               {/* Reviews */}
@@ -176,20 +172,21 @@ export default function AdminProductDetail() {
 
               <form className="mt-10">
                 {/* Colors */}
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">Color</h3>
-
-                  <RadioGroup
-                    value={selectedColor}
-                    onChange={setSelectedColor}
-                    className="mt-4"
-                  >
-                    <RadioGroup.Label className="sr-only">
-                      Choose a color
-                    </RadioGroup.Label>
-                    <div className="flex items-center space-x-3">
-                      {colors &&
-                        colors.map((color) => (
+                {product.colors && product.colors.length>0 &&(
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-900">Color</h3>
+                    <RadioGroup
+                      value={selectedColor}
+                      onChange={setSelectedColor}
+                      className="mt-4"
+                    >
+                  
+                      <RadioGroup.Label className="sr-only">
+                        Choose a color
+                      </RadioGroup.Label>
+                      <div className="flex items-center space-x-3">
+                        {product.colors.map((color) => (
+                         
                           <RadioGroup.Option
                             key={color.name}
                             value={color}
@@ -214,33 +211,35 @@ export default function AdminProductDetail() {
                             />
                           </RadioGroup.Option>
                         ))}
-                    </div>
-                  </RadioGroup>
-                </div>
-
-                {/* Sizes */}
-                <div className="mt-10">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                    <a
-                      href="#"
-                      className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Size guide
-                    </a>
+                      </div>
+                    </RadioGroup>
                   </div>
+                )}
+                {/* Sizes */}
+                {product.sizes && product.sizes.length > 0 &&(
+                  <div className="mt-10">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-medium text-gray-900">
+                        Size
+                      </h3>
+                      <a
+                        href="#"
+                        className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                      >
+                        Size guide
+                      </a>
+                    </div>
 
-                  <RadioGroup
-                    value={selectedSize}
-                    onChange={setSelectedSize}
-                    className="mt-4"
-                  >
-                    <RadioGroup.Label className="sr-only">
-                      Choose a size
-                    </RadioGroup.Label>
-                    <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                      {sizes &&
-                        sizes.map((size) => (
+                    <RadioGroup
+                      value={selectedSize}
+                      onChange={setSelectedSize}
+                      className="mt-4"
+                    >
+                      <RadioGroup.Label className="sr-only">
+                        Choose a size
+                      </RadioGroup.Label>
+                      <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
+                        {product.sizes.map((size) => (
                           <RadioGroup.Option
                             key={size.name}
                             value={size}
@@ -296,9 +295,10 @@ export default function AdminProductDetail() {
                             )}
                           </RadioGroup.Option>
                         ))}
-                    </div>
-                  </RadioGroup>
-                </div>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                )}
 
                 <button
                   onClick={handleCart}
@@ -329,8 +329,7 @@ export default function AdminProductDetail() {
 
                 <div className="mt-4">
                   <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                  
-                      {product.highlights.map((highlight) => (
+                     { product.highlights.map((highlight) => (
                         <li key={highlight} className="text-gray-400">
                           <span className="text-gray-600">{highlight}</span>
                         </li>

@@ -9,17 +9,9 @@ import {
 } from "../productSlice";
 import { useParams } from "react-router-dom";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
-import { discountedPrice } from "../../../app/constants";
 
 import { useAlert } from "react-alert";
 import { InfinitySpin } from "react-loader-spinner";
-
-const highlights = [
-  "Hand cut and sewn locally",
-  "Dyed with our proprietary colors",
-  "Pre-washed & pre-shrunk",
-  "Ultra-soft 100% cotton",
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -45,8 +37,7 @@ export default function ProductDetail() {
       if(selectedSize){
         newItem.size=selectedSize
       }
-      dispatch(addToCartAsync(newItem));
-      alert.success("Item Added to Cart");
+      dispatch(addToCartAsync({item:newItem, alert}));
     } else {
       alert.error("Item Already Added");
     }
@@ -150,7 +141,7 @@ export default function ProductDetail() {
                 $ {product.price}
               </p>
               <p className="text-3xl tracking-tight text-gray-900">
-                $ {discountedPrice(product)}
+                $ {product.discountPrice}
               </p>
 
               {/* Reviews */}
