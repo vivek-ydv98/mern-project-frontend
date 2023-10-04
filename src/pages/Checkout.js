@@ -2,39 +2,22 @@ import React from "react";
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  deleteItemFromCartAsync,
-  selectCartLoaded,
-  selectItems,
-  updateCartAsync,
-} from "../features/cart/cartSlice";
+import { deleteItemFromCartAsync, selectCartLoaded, selectItems, updateCartAsync } from "../features/cart/cartSlice";
 import { useForm } from "react-hook-form";
 import { updateUserAsync } from "../features/user/userSlice";
-import {
-  createOrderAsync,
-  selectCurrentOrder,
-  selectStatus,
-} from "../features/order/orderSlice";
+import { createOrderAsync, selectCurrentOrder, selectStatus } from "../features/order/orderSlice";
 import { selectUserInfo } from "../features/user/userSlice";
 import { InfinitySpin } from "react-loader-spinner";
 
 export default function Checkout() {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo);
   const items = useSelector(selectItems);
   const cartLoaded = useSelector(selectCartLoaded);
   const currentOrder = useSelector(selectCurrentOrder);
   const status = useSelector(selectStatus);
-  const totalAmount = items.reduce(
-    (amount, item) => item.product.discountPrice * item.quantity + amount,
-    0
-  );
+  const totalAmount = items.reduce((amount, item) => item.product.discountPrice * item.quantity + amount, 0);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
@@ -53,15 +36,7 @@ export default function Checkout() {
   };
   const handleOrder = (e) => {
     if (selectedAddress && paymentMethod) {
-      const order = {
-        items,
-        totalAmount,
-        totalItems,
-        user: user.id,
-        paymentMethod,
-        selectedAddress,
-        status: "pending",
-      };
+      const order = { items, totalAmount, totalItems, user: user.id, paymentMethod, selectedAddress, status: "pending" };
       dispatch(createOrderAsync(order));
     } else {
       alert("Enter Address and Payment method");
